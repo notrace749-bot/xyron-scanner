@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>XYRON — FiveM Security</title>
+
+    <meta
+        name="description"
+        content="Xyron — FiveM odaklı güvenlik ve detection scanner."
+    >
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #050507;
+            --bg2: #09070f;
+            --card: #0d0b13;
+            --border: rgba(255,255,255,.08);
+            --text: #f5f3ff;
+            --muted: #8f899e;
+            --purple: #7c3cff;
+            --purple2: #a875ff;
+            --glow: rgba(124,60,255,.35);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(124,60,255,.22),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 90% 40%,
+                    rgba(93,45,190,.08),
+                    transparent 30%
+                ),
+                var(--bg);
+
+            color: var(--text);
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ---------------- NAVBAR ---------------- */
+
+        nav {
+            width: 100%;
+            height: 78px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            border-bottom: 1px solid var(--border);
+
+            background: rgba(5,5,7,.72);
+            backdrop-filter: blur(18px);
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 5px;
+        }
+
+        .logo span {
+            color: var(--purple2);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-button {
+            background: var(--purple);
+            color: white;
+
+            text-decoration: none;
+
+            padding: 11px 18px;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            box-shadow:
+                0 0 25px rgba(124,60,255,.25);
+
+            transition: .2s;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 0 35px rgba(124,60,255,.45);
+        }
+
+        /* ---------------- HERO ---------------- */
+
+        .hero {
+            min-height: 760px;
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding:
+                120px 7%
+                90px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 8px 13px;
+
+            border: 1px solid rgba(168,117,255,.25);
+
+            background:
+                rgba(124,60,255,.07);
+
+            border-radius: 999px;
+
+            color: #bca4ff;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.5px;
+        }
+
+        .badge-dot {
+            width: 7px;
+            height: 7px;
+
+            background: #9d6cff;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 12px #9d6cff;
+        }
+
+        h1 {
+            margin-top: 28px;
+
+            font-size:
+                clamp(55px, 8vw, 100px);
+
+            line-height: .95;
+
+            letter-spacing: -5px;
+
+            font-weight: 900;
+        }
+
+        .gradient {
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff 20%,
+                    #b38cff 65%,
+                    #713cff
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .hero-text {
+            max-width: 690px;
+
+            margin-top: 28px;
+
+            color: var(--muted);
+
+            font-size: 18px;
+
+            line-height: 1.8;
+        }
+
+        .buttons {
+            display: flex;
+
+            gap: 13px;
+
+            margin-top: 38px;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+        }
+
+        .button {
+            text-decoration: none;
+
+            padding: 14px 23px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            transition: .25s;
+        }
+
+        .button-primary {
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3cff,
+                    #9c62ff
+                );
+
+            color: white;
+
+            box-shadow:
+                0 10px 45px rgba(124,60,255,.3);
+        }
+
+        .button-primary:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 15px 55px rgba(124,60,255,.5);
+        }
+
+        .button-secondary {
+            border: 1px solid var(--border);
+
+            background:
+                rgba(255,255,255,.025);
+
+            color: #ddd8e8;
+        }
+
+        .button-secondary:hover {
+            background: rgba(255,255,255,.06);
+        }
+
+        .hero-note {
+            margin-top: 17px;
+
+            font-size: 11px;
+
+            color: #5e5968;
+        }
+
+        /* ---------------- SCANNER PREVIEW ---------------- */
+
+        .preview {
+            width: min(850px, 100%);
+
+            margin-top: 80px;
+
+            padding: 2px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(124,60,255,.45),
+                    transparent 40%,
+                    rgba(124,60,255,.15)
+                );
+
+            box-shadow:
+                0 35px 100px rgba(0,0,0,.6);
+        }
+
+        .terminal {
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #100d18,
+                    #08080c
+                );
+
+            border: 1px solid rgba(255,255,255,.06);
+
+            padding: 20px;
+
+            text-align: left;
+        }
+
+        .terminal-top {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding-bottom: 16px;
+
+            border-bottom: 1px solid var(--border);
+
+            color: #827b8e;
+
+            font-size: 11px;
+        }
+
+        .terminal-title {
+            color: #dcd5e9;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+        .online {
+            color: #63dc9a;
+        }
+
+        .scan-line {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 17px 4px;
+
+            border-bottom: 1px solid rgba(255,255,255,.045);
+
+            font-size: 13px;
+        }
+
+        .scan-line:last-child {
+            border-bottom: none;
+        }
+
+        .scan-label {
+            color: #aaa2b6;
+        }
+
+        .scan-ok {
+            color: #64dc9b;
+        }
+
+        .scan-review {
+            color: #e9bf69;
+        }
+
+        .scan-number {
+            color: #c6b4ff;
+            font-weight: 800;
+        }
+
+        /* ---------------- SECTIONS ---------------- */
+
+        section {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 110px 7%;
+        }
+
+        .section-head {
+            text-align: center;
+
+            max-width: 700px;
+
+            margin: auto;
+        }
+
+        .eyebrow {
+            color: #9d76ff;
+
+            font-size: 11px;
+
+            font-weight: 900;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+        }
+
+        h2 {
+            margin-top: 14px;
+
+            font-size: 43px;
+
+            letter-spacing: -2px;
+        }
+
+        .section-description {
+            color: var(--muted);
+
+            line-height: 1.8;
+
+            margin-top: 17px;
+        }
+
+        /* ---------------- CARDS ---------------- */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 16px;
+
+            margin-top: 48px;
+        }
+
+        .card {
+            padding: 28px;
+
+            border: 1px solid var(--border);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.035),
+                    rgba(255,255,255,.012)
+                );
+
+            border-radius: 15px;
+
+            transition: .25s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+
+            border-color:
+                rgba(124,60,255,.35);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.3);
+        }
+
+        .card-icon {
+            width: 43px;
+            height: 43px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 11px;
+
+            background:
+                rgba(124,60,255,.12);
+
+            color: #b797ff;
+
+            font-size: 20px;
+
+            margin-bottom: 22px;
+        }
+
+        .card h3 {
+            font-size: 17px;
+
+            margin-bottom: 11px;
+        }
+
+        .card p {
+            color: var(--muted);
+
+            line-height: 1.7;
+
+            font-size: 13px;
+        }
+
+        /* ---------------- SECURITY ---------------- */
+
+        .security-box {
+            border: 1px solid rgba(124,60,255,.18);
+
+            background:
+                radial-gradient(
+                    circle at 50% 0%,
+                    rgba(124,60,255,.15),
+                    transparent 55%
+                ),
+                #0b0910;
+
+            border-radius: 20px;
+
+            padding: 70px 40px;
+
+            text-align: center;
+        }
+
+        .security-box h2 {
+            margin-top: 12px;
+        }
+
+        /* ---------------- CTA ---------------- */
+
+        .cta {
+            text-align: center;
+
+            border: 1px solid var(--border);
+
+            border-radius: 20px;
+
+            padding: 70px 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(124,60,255,.10),
+                    rgba(255,255,255,.015)
+                );
+        }
+
+        /* ---------------- FOOTER ---------------- */
+
+        footer {
+            border-top: 1px solid var(--border);
+
+            padding: 32px 7%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            color: #625d6c;
+
+            font-size: 12px;
+        }
+
+        /* ---------------- RESPONSIVE ---------------- */
+
+        @media(max-width: 850px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            h1 {
+                letter-spacing: -3px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 90px;
+            }
+
+            .preview {
+                margin-top: 60px;
+            }
+
+            h2 {
+                font-size: 35px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <a href="#" class="logo">
+        XYR<span>O</span>N
+    </a>
+
+    <div class="nav-links">
+
+        <a href="#features">
+            Features
+        </a>
+
+        <a href="#security">
+            Security
+        </a>
+
+        <a href="#download">
+            Download
+        </a>
+
+    </div>
+
+    <a href="#download" class="nav-button">
+        Get Xyron
+    </a>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<main>
+
+<section class="hero">
+
+    <div class="badge">
+
+        <span class="badge-dot"></span>
+
+        FIVEM SECURITY · V2.1
+
+    </div>
+
+
+    <h1>
+
+        Detect smarter.<br>
+
+        <span class="gradient">
+            Play safer.
+        </span>
+
+    </h1>
+
+
+    <p class="hero-text">
+
+        Xyron, FiveM odaklı modern bir
+        güvenlik ve bütünlük tarayıcısıdır.
+        Şüpheli dosyaları, süreçleri ve
+        FiveM bileşenlerini analiz ederek
+        anlaşılır detection raporları oluşturur.
+
+    </p>
+
+
+    <div class="buttons">
+
+        <a
+            href="#download"
+            class="button button-primary"
+        >
+            Download Xyron
+        </a>
+
+        <a
+            href="#features"
+            class="button button-secondary"
+        >
+            Explore Scanner
+        </a>
+
+    </div>
+
+
+    <p class="hero-note">
+
+        Kullanıcı tarafından başlatılır ·
+        Dosyalar otomatik olarak silinmez
+
+    </p>
+
+
+    <!-- SCANNER PREVIEW -->
+
+    <div class="preview">
+
+        <div class="terminal">
+
+            <div class="terminal-top">
+
+                <span class="terminal-title">
+                    XYRON SECURITY SCANNER
+                </span>
+
+                <span class="online">
+                    ● READY
+                </span>
+
+            </div>
+
+
+            <div class="scan-line">
+
+                <span class="scan-label">
+                    System Environment
+                </span>
+
+                <span class="scan-ok">
+                    DETECTED
+                </span>
+
+            </div>
+
+
+            <div class="scan-line">
+
+                <span class="scan-label">
+                    FiveM Installation
+                </span>
+
+                <span class="scan-ok">
+                    VERIFIED
+                </span>
+
+            </div>
+
+
+            <div class="scan-line">
+
+                <span class="scan-label">
+                    File Analysis
+                </span>
+
+                <span class="scan-number">
+                    ACTIVE
+                </span>
+
+            </div>
+
+
+            <div class="scan-line">
+
+                <span class="scan-label">
+                    High Risk
+                </span>
+
+                <span class="scan-ok">
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="scan-line">
+
+                <span class="scan-label">
+                    Review Candidates
+                </span>
+
+                <span class="scan-review">
+                    0
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURES ================= -->
+
+<section id="features">
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Detection Engine
+        </div>
+
+        <h2>
+            Built for FiveM.
+        </h2>
+
+        <p class="section-description">
+
+            Gereksiz sistem taramalarından uzak,
+            FiveM güvenliğine odaklanan bir
+            detection altyapısı.
+
+        </p>
+
+    </div>
+
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                ◈
+            </div>
+
+            <h3>
+                FiveM Integrity
+            </h3>
+
+            <p>
+
+                FiveM kurulumundaki ilgili
+                çalıştırılabilir dosyaları analiz
+                ederek standart dışı bileşenleri
+                inceleme adayı olarak ayırır.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                ⌁
+            </div>
+
+            <h3>
+                Detection Logs
+            </h3>
+
+            <p>
+
+                SHA-256 hash, dosya boyutu,
+                değiştirilme zamanı ve detection
+                sebebi gibi teknik bilgilerle
+                ayrıntılı rapor oluşturur.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                ✓
+            </div>
+
+            <h3>
+                Risk Analysis
+            </h3>
+
+            <p>
+
+                Sonuçları HIGH, REVIEW ve
+                KNOWN kategorilerine ayırarak
+                false-positive oranını azaltmaya
+                yardımcı olur.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- ================= SECURITY ================= -->
+
+<section id="security">
+
+    <div class="security-box">
+
+        <div class="eyebrow">
+            Privacy First
+        </div>
+
+        <h2>
+            Security without unnecessary data.
+        </h2>
+
+        <p class="section-description">
+
+            Xyron yalnızca FiveM güvenlik taraması
+            için gerekli bilgileri hedefleyecek
+            şekilde tasarlanır. Şifreler, cookie'ler,
+            tarayıcı geçmişi veya kişisel belgeler
+            taranmaz.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= DOWNLOAD ================= -->
+
+<section id="download">
+
+    <div class="cta">
+
+        <div class="eyebrow">
+            Get Started
+        </div>
+
+        <h2>
+            Ready to scan?
+        </h2>
+
+        <p class="section-description">
+
+            Xyron istemcisini indir ve FiveM
+            güvenlik taramasını başlat.
+
+        </p>
+
+
+        <div class="buttons">
+
+            <!-- BURAYA GERÇEK İNDİRME LİNKİNİ KOY -->
+
+            <a
+                href="#"
+                class="button button-primary"
+                onclick="downloadNotReady(event)"
+            >
+                Download Xyron
+            </a>
+
+
+            <!-- BURAYA PANEL LİNKİNİ KOY -->
+
+            <a
+                href="#"
+                class="button button-secondary"
+                onclick="panelNotReady(event)"
+            >
+                Open Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <span>
+        © 2026 Xyron Security
+    </span>
+
+    <span>
+        FiveM Detection Scanner
+    </span>
+
+</footer>
+
+
+<script>
+
+function downloadNotReady(event) {
+
+    event.preventDefault();
+
+    alert(
+        "Xyron indirme bağlantısı henüz bağlanmadı."
+    );
+
+}
+
+
+function panelNotReady(event) {
+
+    event.preventDefault();
+
+    alert(
+        "Xyron Dashboard bağlantısı henüz bağlanmadı."
+    );
+
+}
+
+</script>
+
+</body>
+</html>
