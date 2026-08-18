@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -270,7 +269,8 @@ margin-top:48px
 padding:30px;
 border:1px solid var(--border);
 border-radius:16px;
-background:rgba(255,255,255,.025)
+background:rgba(255,255,255,.025);
+transition:.25s
 }
 
 .card:hover{
@@ -368,6 +368,11 @@ color:white;
 font-weight:800;
 cursor:pointer;
 background:linear-gradient(135deg,#7132ef,#9d62ff)
+}
+
+.modal-button:disabled{
+opacity:.6;
+cursor:not-allowed
 }
 
 .message{
@@ -652,9 +657,11 @@ anahtarını gir.
 <input
 id="licenseInput"
 type="text"
+autocomplete="off"
 placeholder="XYRON-XXXX-XXXX-XXXX">
 
 <button
+id="licenseButton"
 class="modal-button"
 onclick="checkLicense()">
 Continue
@@ -740,6 +747,9 @@ Logout
 const API_URL =
 "https://xyron-api-1.onrender.com";
 
+/*
+ * GitHub'daki scanner.exe
+ */
 const DOWNLOAD_URL =
 "https://github.com/notrace749-bot/xyron-scanner/raw/refs/heads/main/scanner.exe";
 
@@ -752,6 +762,10 @@ function openLicenseLogin(){
 document
 .getElementById("licenseModal")
 .classList.add("active");
+
+document
+.getElementById("licenseInput")
+.focus();
 
 }
 
@@ -782,7 +796,13 @@ document
 }
 
 
-/* LICENSE CHECK + DOWNLOAD */
+/*
+ * LICENSE CHECK
+ *
+ * Önce API'den lisansı kontrol eder.
+ * API "valid: true" döndürürse GitHub'daki
+ * scanner.exe dosyasının indirme adresini açar.
+ */
 
 async function checkLicense(){
 
@@ -791,6 +811,9 @@ document.getElementById("licenseInput");
 
 const message =
 document.getElementById("licenseMessage");
+
+const button =
+document.getElementById("licenseButton");
 
 const key =
 input.value.trim();
@@ -805,6 +828,8 @@ return;
 
 }
 
+
+button.disabled = true;
 
 message.innerHTML =
 "<span style='color:#aaa'>Lisans kontrol ediliyor...</span>";
@@ -830,14 +855,28 @@ license_key:key
 );
 
 
-const data =
+let data;
+
+try{
+
+data =
 await response.json();
+
+}catch{
+
+throw new Error(
+"API geçerli JSON döndürmedi."
+);
+
+}
 
 
 if(!response.ok || !data.valid){
 
 message.innerHTML =
 "<span style='color:#ef7777'>✕ Geçersiz veya pasif lisans.</span>";
+
+button.disabled = false;
 
 return;
 
@@ -848,27 +887,81 @@ message.innerHTML =
 "<span style='color:#63dc9a'>✓ Lisans doğrulandı. İndirme başlıyor...</span>";
 
 
-setTimeout(()=>{
+/*
+ * Doğrulama başarılı.
+ * 800 ms sonra gerçek EXE indirme bağlantısı açılır.
+ */
 
-window.location.href =
+setTimeout(function(){
+
+const link =
+document.createElement("a");
+
+link.href =
 DOWNLOAD_URL;
+
+link.download =
+"XyronScanner.exe";
+
+link.target =
+"_blank";
+
+link.rel =
+"noopener";
+
+document.body.appendChild(link);
+
+link.click();
+
+link.remove();
+
+closeModal("licenseModal");
+
+button.disabled = false;
 
 },800);
 
 
 }catch(error){
 
-console.error(error);
+console.error(
+"License check error:",
+error
+);
 
 message.innerHTML =
-"<span style='color:#ef7777'>API bağlantısı kurulamadı.</span>";
+"<span style='color:#ef7777'>API bağlantısı kurulamadı. API adresini veya Render durumunu kontrol et.</span>";
+
+button.disabled = false;
 
 }
 
 }
 
 
-/* ADMIN LOGIN */
+/*
+ * ENTER TUŞU
+ */
+
+document
+.getElementById("licenseInput")
+.addEventListener(
+"keydown",
+function(event){
+
+if(event.key === "Enter"){
+
+checkLicense();
+
+}
+
+}
+);
+
+
+/*
+ * ADMIN LOGIN
+ */
 
 async function adminLogin(){
 
@@ -947,6 +1040,8 @@ openDashboard();
 
 }catch(error){
 
+console.error(error);
+
 message.innerHTML =
 "<span style='color:#ef7777'>API bağlantısı kurulamadı.</span>";
 
@@ -955,7 +1050,9 @@ message.innerHTML =
 }
 
 
-/* DASHBOARD */
+/*
+ * DASHBOARD
+ */
 
 async function openDashboard(){
 
@@ -1032,9 +1129,11 @@ const status =
 license.active
 
 ?
+
 "<span class='active'>● ACTIVE</span>"
 
 :
+
 "<span class='revoked'>● REVOKED</span>";
 
 
@@ -1075,6 +1174,8 @@ list.appendChild(item);
 
 }catch(error){
 
+console.error(error);
+
 list.innerHTML =
 "<p style='color:#ef7777;margin-top:20px'>Lisanslar yüklenemedi.</p>";
 
@@ -1083,7 +1184,9 @@ list.innerHTML =
 }
 
 
-/* CREATE LICENSE */
+/*
+ * CREATE LICENSE
+ */
 
 async function createLicense(){
 
@@ -1129,14 +1232,20 @@ data.license_key
 
 }catch(error){
 
-alert("Lisans oluşturulamadı.");
+console.error(error);
+
+alert(
+"Lisans oluşturulamadı."
+);
 
 }
 
 }
 
 
-/* REVOKE LICENSE */
+/*
+ * REVOKE LICENSE
+ */
 
 async function revokeLicense(key){
 
@@ -1186,14 +1295,20 @@ await loadLicenses();
 
 }catch(error){
 
-alert("Lisans iptal edilemedi.");
+console.error(error);
+
+alert(
+"Lisans iptal edilemedi."
+);
 
 }
 
 }
 
 
-/* LOGOUT */
+/*
+ * LOGOUT
+ */
 
 function logoutAdmin(){
 
@@ -1209,8 +1324,30 @@ closeModal(
 
 }
 
+
+/*
+ * MODAL DIŞINA TIKLAYINCA KAPAT
+ */
+
+document
+.querySelectorAll(".modal")
+.forEach(function(modal){
+
+modal.addEventListener(
+"click",
+function(event){
+
+if(event.target === modal){
+
+modal.classList.remove("active");
+
+}
+
+});
+
+});
+
 </script>
 
 </body>
 </html>
-```
