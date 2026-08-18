@@ -747,9 +747,6 @@ Logout
 const API_URL =
 "https://xyron-api-1.onrender.com";
 
-/*
- * GitHub'daki scanner.exe
- */
 const DOWNLOAD_URL =
 "https://github.com/notrace749-bot/xyron-scanner/raw/refs/heads/main/scanner.exe";
 
@@ -796,13 +793,9 @@ document
 }
 
 
-/*
- * LICENSE CHECK
- *
- * Önce API'den lisansı kontrol eder.
- * API "valid: true" döndürürse GitHub'daki
- * scanner.exe dosyasının indirme adresini açar.
- */
+/* =========================
+   LICENSE CHECK
+========================= */
 
 async function checkLicense(){
 
@@ -844,8 +837,8 @@ API_URL + "/license/check",
 method:"POST",
 
 headers:{
-"Content-Type":
-"application/json"
+"Content-Type":"application/json",
+"Accept":"application/json"
 },
 
 body:JSON.stringify({
@@ -855,7 +848,7 @@ license_key:key
 );
 
 
-let data;
+let data = null;
 
 try{
 
@@ -864,14 +857,76 @@ await response.json();
 
 }catch{
 
-throw new Error(
-"API geçerli JSON döndürmedi."
-);
+data = null;
 
 }
 
 
-if(!response.ok || !data.valid){
+console.log(
+"License response:",
+response.status,
+data
+);
+
+
+/* API endpoint bulunamadı */
+
+if(response.status === 404){
+
+message.innerHTML =
+"<span style='color:#ef7777'>✕ /license/check endpoint bulunamadı.</span>";
+
+button.disabled = false;
+
+return;
+
+}
+
+
+/* Yanlış HTTP methodu */
+
+if(response.status === 405){
+
+message.innerHTML =
+"<span style='color:#ef7777'>✕ API /license/check POST kabul etmiyor. Render'daki API güncel değil.</span>";
+
+button.disabled = false;
+
+return;
+
+}
+
+
+/* Diğer API hataları */
+
+if(!response.ok){
+
+const detail =
+data && data.detail
+? data.detail
+: "Bilinmeyen API hatası.";
+
+message.innerHTML =
+"<span style='color:#ef7777'>✕ API Hatası: "
++
+response.status
++
+" — "
++
+detail
++
+"</span>";
+
+button.disabled = false;
+
+return;
+
+}
+
+
+/* Lisans geçersiz */
+
+if(!data || data.valid !== true){
 
 message.innerHTML =
 "<span style='color:#ef7777'>✕ Geçersiz veya pasif lisans.</span>";
@@ -883,14 +938,11 @@ return;
 }
 
 
+/* Lisans geçerli */
+
 message.innerHTML =
 "<span style='color:#63dc9a'>✓ Lisans doğrulandı. İndirme başlıyor...</span>";
 
-
-/*
- * Doğrulama başarılı.
- * 800 ms sonra gerçek EXE indirme bağlantısı açılır.
- */
 
 setTimeout(function(){
 
@@ -930,7 +982,7 @@ error
 );
 
 message.innerHTML =
-"<span style='color:#ef7777'>API bağlantısı kurulamadı. API adresini veya Render durumunu kontrol et.</span>";
+"<span style='color:#ef7777'>✕ API bağlantısı kurulamadı.</span>";
 
 button.disabled = false;
 
@@ -939,9 +991,7 @@ button.disabled = false;
 }
 
 
-/*
- * ENTER TUŞU
- */
+/* ENTER */
 
 document
 .getElementById("licenseInput")
@@ -959,9 +1009,9 @@ checkLicense();
 );
 
 
-/*
- * ADMIN LOGIN
- */
+/* =========================
+   ADMIN LOGIN
+========================= */
 
 async function adminLogin(){
 
@@ -1050,9 +1100,9 @@ message.innerHTML =
 }
 
 
-/*
- * DASHBOARD
- */
+/* =========================
+   DASHBOARD
+========================= */
 
 async function openDashboard(){
 
@@ -1184,9 +1234,9 @@ list.innerHTML =
 }
 
 
-/*
- * CREATE LICENSE
- */
+/* =========================
+   CREATE LICENSE
+========================= */
 
 async function createLicense(){
 
@@ -1243,9 +1293,9 @@ alert(
 }
 
 
-/*
- * REVOKE LICENSE
- */
+/* =========================
+   REVOKE LICENSE
+========================= */
 
 async function revokeLicense(key){
 
@@ -1306,9 +1356,9 @@ alert(
 }
 
 
-/*
- * LOGOUT
- */
+/* =========================
+   LOGOUT
+========================= */
 
 function logoutAdmin(){
 
@@ -1325,9 +1375,9 @@ closeModal(
 }
 
 
-/*
- * MODAL DIŞINA TIKLAYINCA KAPAT
- */
+/* =========================
+   MODAL
+========================= */
 
 document
 .querySelectorAll(".modal")
