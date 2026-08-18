@@ -32,8 +32,6 @@ body {
     overflow-x: hidden;
 }
 
-/* BACKGROUND */
-
 .background {
     position: fixed;
     inset: 0;
@@ -83,8 +81,6 @@ body {
         transform: translate(-160px,120px) scale(1.2);
     }
 }
-
-/* NAV */
 
 nav {
     position: sticky;
@@ -148,8 +144,6 @@ nav {
         #9d62ff
     );
 }
-
-/* HERO */
 
 .hero {
     min-height: 820px;
@@ -272,8 +266,6 @@ h1 {
     background: rgba(255,255,255,.07);
 }
 
-/* PREVIEW */
-
 .preview {
     width: min(850px,100%);
     margin-top: 80px;
@@ -333,8 +325,6 @@ h1 {
     color: #64dc9b;
 }
 
-/* SECTIONS */
-
 section {
     max-width: 1200px;
     margin: auto;
@@ -372,8 +362,6 @@ h2 {
 
     line-height: 1.8;
 }
-
-/* CARDS */
 
 .cards {
     display: grid;
@@ -420,8 +408,6 @@ h2 {
     line-height: 1.7;
 }
 
-/* SECURITY */
-
 .security-box,
 .cta {
     padding: 70px 35px;
@@ -440,8 +426,6 @@ h2 {
         ),
         rgba(10,8,15,.85);
 }
-
-/* MODAL */
 
 .modal {
     display: none;
@@ -644,8 +628,6 @@ h2 {
     cursor: pointer;
 }
 
-/* FOOTER */
-
 footer {
     padding: 32px 7%;
 
@@ -659,8 +641,6 @@ footer {
 
     font-size: 12px;
 }
-
-/* MOBILE */
 
 @media(max-width:850px) {
 
@@ -706,17 +686,9 @@ footer {
 
     <div class="nav-links">
 
-        <a href="#features">
-            Features
-        </a>
-
-        <a href="#security">
-            Security
-        </a>
-
-        <a href="#download">
-            Download
-        </a>
+        <a href="#features">Features</a>
+        <a href="#security">Security</a>
+        <a href="#download">Download</a>
 
     </div>
 
@@ -966,8 +938,6 @@ footer {
 
 </main>
 
-<!-- LICENSE MODAL -->
-
 <div id="licenseModal" class="modal">
 
     <div class="modal-box">
@@ -1011,8 +981,6 @@ footer {
 
 </div>
 
-<!-- ADMIN LOGIN -->
-
 <div id="adminModal" class="modal">
 
     <div class="modal-box">
@@ -1054,8 +1022,6 @@ footer {
     </div>
 
 </div>
-
-<!-- ADMIN DASHBOARD -->
 
 <div id="dashboardModal" class="modal">
 
@@ -1110,21 +1076,12 @@ footer {
 
 <script>
 
-/* =========================================================
-   API
-========================================================= */
-
 const API_URL =
     "https://xyron-api-1.onrender.com";
-
 
 let adminToken =
     sessionStorage.getItem("xyron_admin_token");
 
-
-/* =========================================================
-   MODALS
-========================================================= */
 
 function openLicenseLogin() {
 
@@ -1160,10 +1117,6 @@ function closeModal(id) {
 
 }
 
-
-/* =========================================================
-   LICENSE CHECK
-========================================================= */
 
 async function checkLicense() {
 
@@ -1242,10 +1195,6 @@ async function checkLicense() {
 }
 
 
-/* =========================================================
-   ADMIN LOGIN
-========================================================= */
-
 async function adminLogin() {
 
     const input =
@@ -1322,10 +1271,6 @@ async function adminLogin() {
 }
 
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
 async function openDashboard() {
 
     document
@@ -1336,10 +1281,6 @@ async function openDashboard() {
 
 }
 
-
-/* =========================================================
-   LOAD LICENSES
-========================================================= */
 
 async function loadLicenses() {
 
@@ -1416,18 +1357,14 @@ async function loadLicenses() {
 
                     ${
                         license.active
-
                         ?
-
                         `<button
                             class="revoke-button"
                             onclick="revokeLicense('${license.license_key}')"
                         >
                             Revoke
                         </button>`
-
                         :
-
                         ""
                     }
 
@@ -1447,10 +1384,6 @@ async function loadLicenses() {
 
 }
 
-
-/* =========================================================
-   CREATE LICENSE
-========================================================= */
 
 async function createLicense() {
 
@@ -1501,10 +1434,6 @@ async function createLicense() {
 
 }
 
-
-/* =========================================================
-   REVOKE
-========================================================= */
 
 async function revokeLicense(key) {
 
@@ -1562,10 +1491,6 @@ async function revokeLicense(key) {
 
 }
 
-
-/* =========================================================
-   LOGOUT
-========================================================= */
 
 function logoutAdmin() {
 
