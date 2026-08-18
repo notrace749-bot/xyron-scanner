@@ -1,1508 +1,1211 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>XYRON — FiveM Security</title>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root{
+--bg:#030208;
+--border:rgba(255,255,255,.08);
+--text:#f7f3ff;
+--muted:#928a9f;
+--purple:#7c3cff;
+--purple2:#b17cff
 }
 
-:root {
-    --bg: #030208;
-    --card: rgba(15,10,25,.92);
-    --border: rgba(255,255,255,.08);
-    --text: #f7f3ff;
-    --muted: #928a9f;
-    --purple: #7c3cff;
-    --purple2: #b17cff;
+body{
+min-height:100vh;
+background:#030208;
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
+overflow-x:hidden
 }
 
-body {
-    min-height: 100vh;
-    background: #030208;
-    color: var(--text);
-    font-family: Arial, Helvetica, sans-serif;
-    overflow-x: hidden;
+.background{
+position:fixed;
+inset:0;
+z-index:-5;
+overflow:hidden;
+background:radial-gradient(circle at 50% -10%,rgba(124,60,255,.22),transparent 40%),#030208
+}
+
+.orb{
+position:absolute;
+width:500px;
+height:500px;
+border-radius:50%;
+filter:blur(100px);
+opacity:.22
 }
 
-.background {
-    position: fixed;
-    inset: 0;
-    z-index: -5;
-    overflow: hidden;
-
-    background:
-        radial-gradient(
-            circle at 50% -10%,
-            rgba(124,60,255,.22),
-            transparent 40%
-        ),
-        #030208;
-}
-
-.orb {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: .22;
-}
-
-.orb.one {
-    background: #6427ff;
-    left: -180px;
-    top: 10%;
-    animation: moveOne 15s infinite alternate ease-in-out;
-}
-
-.orb.two {
-    background: #9b55ff;
-    right: -180px;
-    top: 25%;
-    animation: moveTwo 18s infinite alternate ease-in-out;
-}
-
-@keyframes moveOne {
-    to {
-        transform: translate(180px,80px) scale(1.2);
-    }
-}
-
-@keyframes moveTwo {
-    to {
-        transform: translate(-160px,120px) scale(1.2);
-    }
-}
-
-nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-
-    height: 76px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 7%;
-
-    background: rgba(3,2,8,.78);
-    border-bottom: 1px solid var(--border);
-
-    backdrop-filter: blur(20px);
-}
-
-.logo {
-    color: white;
-    text-decoration: none;
-    font-size: 22px;
-    font-weight: 900;
-    letter-spacing: 5px;
-}
-
-.logo span {
-    color: var(--purple2);
-}
-
-.nav-links {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 13px;
-}
-
-.nav-links a:hover {
-    color: white;
-}
-
-.nav-button {
-    color: white;
-    text-decoration: none;
-
-    padding: 11px 19px;
-    border-radius: 9px;
-
-    font-size: 13px;
-    font-weight: 800;
-
-    background: linear-gradient(
-        135deg,
-        #7132ef,
-        #9d62ff
-    );
+.orb.one{
+background:#6427ff;
+left:-180px;
+top:10%;
+animation:moveOne 15s infinite alternate ease-in-out
 }
-
-.hero {
-    min-height: 820px;
-    max-width: 1200px;
-    margin: auto;
 
-    padding: 120px 7%;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
+.orb.two{
+background:#9b55ff;
+right:-180px;
+top:25%;
+animation:moveTwo 18s infinite alternate ease-in-out
 }
-
-.badge {
-    padding: 8px 15px;
-    border-radius: 999px;
-
-    color: #c7b1ff;
-
-    border: 1px solid rgba(168,117,255,.3);
 
-    background: rgba(124,60,255,.08);
-
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 2px;
+@keyframes moveOne{
+to{transform:translate(180px,80px) scale(1.2)}
 }
-
-h1 {
-    margin-top: 30px;
-
-    font-size: clamp(58px,9vw,110px);
-
-    line-height: .92;
 
-    letter-spacing: -6px;
+@keyframes moveTwo{
+to{transform:translate(-160px,120px) scale(1.2)}
 }
 
-.gradient {
-    background: linear-gradient(
-        100deg,
-        white,
-        #c7a8ff,
-        #713cff
-    );
-
-    -webkit-background-clip: text;
-    background-clip: text;
-
-    color: transparent;
+nav{
+position:sticky;
+top:0;
+z-index:100;
+height:76px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 7%;
+background:rgba(3,2,8,.78);
+border-bottom:1px solid var(--border);
+backdrop-filter:blur(20px)
 }
-
-.hero-text {
-    max-width: 700px;
-
-    margin-top: 30px;
-
-    color: var(--muted);
 
-    font-size: 17px;
-    line-height: 1.8;
+.logo{
+color:white;
+text-decoration:none;
+font-size:22px;
+font-weight:900;
+letter-spacing:5px
 }
 
-.buttons {
-    display: flex;
-    gap: 13px;
+.logo span{color:var(--purple2)}
 
-    margin-top: 35px;
-
-    flex-wrap: wrap;
-    justify-content: center;
+.nav-links{
+display:flex;
+gap:30px
 }
-
-.button {
-    display: inline-block;
-
-    padding: 14px 24px;
-
-    border-radius: 10px;
-
-    text-decoration: none;
 
-    font-size: 13px;
-    font-weight: 800;
-
-    cursor: pointer;
-
-    transition: .25s;
+.nav-links a{
+color:var(--muted);
+text-decoration:none;
+font-size:13px
 }
 
-.primary {
-    color: white;
+.nav-links a:hover{color:white}
 
-    background: linear-gradient(
-        135deg,
-        #7132ef,
-        #a064ff
-    );
-
-    border: none;
+.nav-button{
+color:white;
+text-decoration:none;
+padding:11px 19px;
+border-radius:9px;
+font-size:13px;
+font-weight:800;
+background:linear-gradient(135deg,#7132ef,#9d62ff)
 }
 
-.primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 50px rgba(124,60,255,.4);
+.hero{
+min-height:820px;
+max-width:1200px;
+margin:auto;
+padding:120px 7%;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center
 }
-
-.secondary {
-    color: #ddd7e8;
-
-    background: rgba(255,255,255,.025);
 
-    border: 1px solid var(--border);
+.badge{
+padding:8px 15px;
+border-radius:999px;
+color:#c7b1ff;
+border:1px solid rgba(168,117,255,.3);
+background:rgba(124,60,255,.08);
+font-size:10px;
+font-weight:900;
+letter-spacing:2px
 }
 
-.secondary:hover {
-    background: rgba(255,255,255,.07);
+h1{
+margin-top:30px;
+font-size:clamp(58px,9vw,110px);
+line-height:.92;
+letter-spacing:-6px
 }
 
-.preview {
-    width: min(850px,100%);
-    margin-top: 80px;
-
-    padding: 1px;
-
-    border-radius: 18px;
-
-    background: linear-gradient(
-        135deg,
-        rgba(124,60,255,.5),
-        transparent
-    );
+.gradient{
+background:linear-gradient(100deg,white,#c7a8ff,#713cff);
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent
 }
-
-.terminal {
-    padding: 22px;
-
-    border-radius: 18px;
 
-    background: rgba(8,6,12,.96);
-
-    text-align: left;
+.hero-text{
+max-width:700px;
+margin-top:30px;
+color:var(--muted);
+font-size:17px;
+line-height:1.8
 }
-
-.terminal-top {
-    display: flex;
-    justify-content: space-between;
 
-    padding-bottom: 15px;
-
-    border-bottom: 1px solid var(--border);
-
-    font-size: 11px;
+.buttons{
+display:flex;
+gap:13px;
+margin-top:35px;
+flex-wrap:wrap;
+justify-content:center
 }
 
-.online {
-    color: #63dc9a;
+.button{
+display:inline-block;
+padding:14px 24px;
+border-radius:10px;
+text-decoration:none;
+font-size:13px;
+font-weight:800;
+cursor:pointer;
+transition:.25s
 }
-
-.scan-line {
-    display: flex;
-    justify-content: space-between;
 
-    padding: 17px 4px;
-
-    border-bottom: 1px solid rgba(255,255,255,.05);
-
-    font-size: 13px;
+.primary{
+color:white;
+background:linear-gradient(135deg,#7132ef,#a064ff);
+border:none
 }
 
-.scan-label {
-    color: #aaa2b6;
+.primary:hover{
+transform:translateY(-3px);
+box-shadow:0 15px 50px rgba(124,60,255,.4)
 }
 
-.scan-ok {
-    color: #64dc9b;
+.secondary{
+color:#ddd7e8;
+background:rgba(255,255,255,.025);
+border:1px solid var(--border)
 }
 
-section {
-    max-width: 1200px;
-    margin: auto;
+.secondary:hover{background:rgba(255,255,255,.07)}
 
-    padding: 110px 7%;
+.preview{
+width:min(850px,100%);
+margin-top:80px;
+padding:1px;
+border-radius:18px;
+background:linear-gradient(135deg,rgba(124,60,255,.5),transparent)
 }
 
-.section-head {
-    text-align: center;
+.terminal{
+padding:22px;
+border-radius:18px;
+background:rgba(8,6,12,.96);
+text-align:left
 }
-
-.eyebrow {
-    color: #a27aff;
-
-    font-size: 10px;
-
-    font-weight: 900;
 
-    letter-spacing: 3px;
+.terminal-top{
+display:flex;
+justify-content:space-between;
+padding-bottom:15px;
+border-bottom:1px solid var(--border);
+font-size:11px
 }
 
-h2 {
-    margin-top: 14px;
+.online{color:#63dc9a}
 
-    font-size: 43px;
-
-    letter-spacing: -2px;
+.scan-line{
+display:flex;
+justify-content:space-between;
+padding:17px 4px;
+border-bottom:1px solid rgba(255,255,255,.05);
+font-size:13px
 }
-
-.section-description {
-    max-width: 700px;
-    margin: 17px auto 0;
 
-    color: var(--muted);
+.scan-label{color:#aaa2b6}
+.scan-ok{color:#64dc9b}
 
-    line-height: 1.8;
+section{
+max-width:1200px;
+margin:auto;
+padding:110px 7%
 }
 
-.cards {
-    display: grid;
+.section-head{text-align:center}
 
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap: 16px;
-
-    margin-top: 48px;
+.eyebrow{
+color:#a27aff;
+font-size:10px;
+font-weight:900;
+letter-spacing:3px
 }
-
-.card {
-    padding: 30px;
 
-    border: 1px solid var(--border);
-
-    border-radius: 16px;
-
-    background: rgba(255,255,255,.025);
+h2{
+margin-top:14px;
+font-size:43px;
+letter-spacing:-2px
 }
 
-.card:hover {
-    border-color: rgba(124,60,255,.4);
-    transform: translateY(-5px);
+.section-description{
+max-width:700px;
+margin:17px auto 0;
+color:var(--muted);
+line-height:1.8
 }
 
-.card-icon {
-    font-size: 25px;
-    color: #bd9dff;
-
-    margin-bottom: 20px;
+.cards{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px;
+margin-top:48px
 }
 
-.card h3 {
-    margin-bottom: 10px;
+.card{
+padding:30px;
+border:1px solid var(--border);
+border-radius:16px;
+background:rgba(255,255,255,.025)
 }
-
-.card p {
-    color: var(--muted);
 
-    font-size: 13px;
-
-    line-height: 1.7;
+.card:hover{
+border-color:rgba(124,60,255,.4);
+transform:translateY(-5px)
 }
-
-.security-box,
-.cta {
-    padding: 70px 35px;
-
-    text-align: center;
-
-    border: 1px solid rgba(124,60,255,.2);
-
-    border-radius: 20px;
 
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(124,60,255,.15),
-            transparent 60%
-        ),
-        rgba(10,8,15,.85);
+.card-icon{
+font-size:25px;
+color:#bd9dff;
+margin-bottom:20px
 }
 
-.modal {
-    display: none;
+.card h3{margin-bottom:10px}
 
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 9999;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background: rgba(0,0,0,.78);
-
-    backdrop-filter: blur(15px);
+.card p{
+color:var(--muted);
+font-size:13px;
+line-height:1.7
 }
 
-.modal.active {
-    display: flex;
+.security-box,.cta{
+padding:70px 35px;
+text-align:center;
+border:1px solid rgba(124,60,255,.2);
+border-radius:20px;
+background:radial-gradient(circle at 50% 0%,rgba(124,60,255,.15),transparent 60%),rgba(10,8,15,.85)
 }
-
-.modal-box {
-    position: relative;
-
-    width: min(520px,100%);
-
-    padding: 35px;
-
-    border-radius: 20px;
 
-    border: 1px solid rgba(124,60,255,.25);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20,14,31,.98),
-            rgba(7,6,12,.98)
-        );
-
-    box-shadow:
-        0 30px 100px rgba(0,0,0,.7);
+.modal{
+display:none;
+position:fixed;
+inset:0;
+z-index:9999;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:rgba(0,0,0,.78);
+backdrop-filter:blur(15px)
 }
-
-.modal-close {
-    position: absolute;
-
-    right: 18px;
-    top: 12px;
-
-    border: none;
 
-    background: none;
+.modal.active{display:flex}
 
-    color: #aaa;
-
-    font-size: 28px;
-
-    cursor: pointer;
+.modal-box{
+position:relative;
+width:min(520px,100%);
+padding:35px;
+border-radius:20px;
+border:1px solid rgba(124,60,255,.25);
+background:linear-gradient(145deg,rgba(20,14,31,.98),rgba(7,6,12,.98));
+box-shadow:0 30px 100px rgba(0,0,0,.7)
 }
 
-.modal-box h2 {
-    margin-top: 12px;
+.modal-close{
+position:absolute;
+right:18px;
+top:12px;
+border:none;
+background:none;
+color:#aaa;
+font-size:28px;
+cursor:pointer
 }
 
-.modal-box p {
-    margin-top: 10px;
+.modal-box h2{margin-top:12px}
 
-    color: var(--muted);
-
-    line-height: 1.6;
+.modal-box p{
+margin-top:10px;
+color:var(--muted);
+line-height:1.6
 }
-
-.modal-box input {
-    width: 100%;
-
-    margin-top: 22px;
 
-    padding: 15px;
-
-    border-radius: 10px;
-
-    border: 1px solid rgba(255,255,255,.1);
-
-    background: rgba(255,255,255,.04);
-
-    color: white;
-
-    outline: none;
+.modal-box input{
+width:100%;
+margin-top:22px;
+padding:15px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,.1);
+background:rgba(255,255,255,.04);
+color:white;
+outline:none
 }
 
-.modal-box input:focus {
-    border-color: rgba(124,60,255,.6);
+.modal-box input:focus{
+border-color:rgba(124,60,255,.6)
 }
-
-.modal-button {
-    width: 100%;
-
-    margin-top: 15px;
-
-    padding: 14px;
-
-    border: none;
-
-    border-radius: 10px;
 
-    color: white;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7132ef,
-            #9d62ff
-        );
+.modal-button{
+width:100%;
+margin-top:15px;
+padding:14px;
+border:none;
+border-radius:10px;
+color:white;
+font-weight:800;
+cursor:pointer;
+background:linear-gradient(135deg,#7132ef,#9d62ff)
 }
 
-.message {
-    margin-top: 15px;
-
-    font-size: 13px;
+.message{
+margin-top:15px;
+font-size:13px
 }
-
-.dashboard-box {
-    width: min(700px,100%);
 
-    max-height: 85vh;
-
-    overflow-y: auto;
+.dashboard-box{
+width:min(700px,100%);
+max-height:85vh;
+overflow-y:auto
 }
-
-.license-item {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 15px;
 
-    margin-top: 12px;
-
-    padding: 15px;
-
-    border-radius: 10px;
-
-    background: rgba(255,255,255,.035);
-
-    border: 1px solid rgba(255,255,255,.07);
+.license-item{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+margin-top:12px;
+padding:15px;
+border-radius:10px;
+background:rgba(255,255,255,.035);
+border:1px solid rgba(255,255,255,.07)
 }
-
-.license-key {
-    color: #c8adff;
 
-    font-family: monospace;
+.license-key{
+color:#c8adff;
+font-family:monospace
 }
 
-.active {
-    color: #63dc9a;
-}
+.active{color:#63dc9a}
+.revoked{color:#ef7777}
 
-.revoked {
-    color: #ef7777;
+.revoke-button{
+border:none;
+border-radius:7px;
+padding:8px 11px;
+color:white;
+background:rgba(220,70,90,.2);
+cursor:pointer
 }
-
-.revoke-button {
-    border: none;
-
-    border-radius: 7px;
-
-    padding: 8px 11px;
-
-    color: white;
 
-    background: rgba(220,70,90,.2);
-
-    cursor: pointer;
+.logout-button{
+width:100%;
+margin-top:20px;
+padding:12px;
+border-radius:9px;
+border:1px solid var(--border);
+background:rgba(255,255,255,.03);
+color:#aaa;
+cursor:pointer
 }
-
-.logout-button {
-    width: 100%;
-
-    margin-top: 20px;
-
-    padding: 12px;
-
-    border-radius: 9px;
 
-    border: 1px solid var(--border);
-
-    background: rgba(255,255,255,.03);
-
-    color: #aaa;
-
-    cursor: pointer;
+footer{
+padding:32px 7%;
+display:flex;
+justify-content:space-between;
+border-top:1px solid var(--border);
+color:#625d6c;
+font-size:12px
 }
-
-footer {
-    padding: 32px 7%;
-
-    display: flex;
 
-    justify-content: space-between;
-
-    border-top: 1px solid var(--border);
-
-    color: #625d6c;
-
-    font-size: 12px;
+@media(max-width:850px){
+.nav-links{display:none}
+.cards{grid-template-columns:1fr}
+h1{font-size:60px;letter-spacing:-4px}
+h2{font-size:35px}
+footer{
+flex-direction:column;
+gap:10px;
+text-align:center
 }
-
-@media(max-width:850px) {
-
-    .nav-links {
-        display: none;
-    }
-
-    .cards {
-        grid-template-columns: 1fr;
-    }
-
-    h1 {
-        font-size: 60px;
-        letter-spacing: -4px;
-    }
-
-    h2 {
-        font-size: 35px;
-    }
-
-    footer {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="background">
-    <div class="orb one"></div>
-    <div class="orb two"></div>
+<div class="orb one"></div>
+<div class="orb two"></div>
 </div>
 
 <nav>
+<a href="#" class="logo">XYR<span>O</span>N</a>
 
-    <a href="#" class="logo">
-        XYR<span>O</span>N
-    </a>
+<div class="nav-links">
+<a href="#features">Features</a>
+<a href="#security">Security</a>
+<a href="#download">Download</a>
+</div>
 
-    <div class="nav-links">
-
-        <a href="#features">Features</a>
-        <a href="#security">Security</a>
-        <a href="#download">Download</a>
-
-    </div>
-
-    <a href="#download" class="nav-button">
-        Get Xyron
-    </a>
-
+<a href="#download" class="nav-button">Get Xyron</a>
 </nav>
 
 <main>
 
 <section class="hero">
 
-    <div class="badge">
-        ● FIVEM SECURITY · V2.1
-    </div>
+<div class="badge">● FIVEM SECURITY · V2.1</div>
 
-    <h1>
-        Detect smarter.<br>
-        <span class="gradient">
-            Play safer.
-        </span>
-    </h1>
+<h1>
+Detect smarter.<br>
+<span class="gradient">Play safer.</span>
+</h1>
 
-    <p class="hero-text">
-        Xyron, FiveM odaklı modern bir
-        güvenlik ve bütünlük tarayıcısıdır.
-        Şüpheli dosyaları, süreçleri ve
-        FiveM bileşenlerini analiz ederek
-        anlaşılır detection raporları oluşturur.
-    </p>
+<p class="hero-text">
+Xyron, FiveM odaklı modern bir
+güvenlik ve bütünlük tarayıcısıdır.
+Şüpheli dosyaları, süreçleri ve
+FiveM bileşenlerini analiz ederek
+anlaşılır detection raporları oluşturur.
+</p>
 
-    <div class="buttons">
+<div class="buttons">
 
-        <a href="#download" class="button primary">
-            Download Xyron
-        </a>
+<a href="#download" class="button primary">
+Download Xyron
+</a>
 
-        <a href="#features" class="button secondary">
-            Explore Scanner
-        </a>
+<a href="#features" class="button secondary">
+Explore Scanner
+</a>
 
-    </div>
+</div>
 
-    <div class="preview">
+<div class="preview">
 
-        <div class="terminal">
+<div class="terminal">
 
-            <div class="terminal-top">
+<div class="terminal-top">
+<span>XYRON SECURITY SCANNER</span>
+<span class="online">● READY</span>
+</div>
 
-                <span>
-                    XYRON SECURITY SCANNER
-                </span>
+<div class="scan-line">
+<span class="scan-label">System Environment</span>
+<span class="scan-ok">DETECTED</span>
+</div>
 
-                <span class="online">
-                    ● READY
-                </span>
+<div class="scan-line">
+<span class="scan-label">FiveM Installation</span>
+<span class="scan-ok">VERIFIED</span>
+</div>
 
-            </div>
+<div class="scan-line">
+<span class="scan-label">File Analysis</span>
+<span class="scan-ok">ACTIVE</span>
+</div>
 
-            <div class="scan-line">
-                <span class="scan-label">
-                    System Environment
-                </span>
+<div class="scan-line">
+<span class="scan-label">High Risk</span>
+<span class="scan-ok">0</span>
+</div>
 
-                <span class="scan-ok">
-                    DETECTED
-                </span>
-            </div>
-
-            <div class="scan-line">
-                <span class="scan-label">
-                    FiveM Installation
-                </span>
-
-                <span class="scan-ok">
-                    VERIFIED
-                </span>
-            </div>
-
-            <div class="scan-line">
-                <span class="scan-label">
-                    File Analysis
-                </span>
-
-                <span class="scan-ok">
-                    ACTIVE
-                </span>
-            </div>
-
-            <div class="scan-line">
-                <span class="scan-label">
-                    High Risk
-                </span>
-
-                <span class="scan-ok">
-                    0
-                </span>
-            </div>
-
-        </div>
-
-    </div>
+</div>
+</div>
 
 </section>
 
 <section id="features">
 
-    <div class="section-head">
+<div class="section-head">
 
-        <div class="eyebrow">
-            DETECTION ENGINE
-        </div>
+<div class="eyebrow">DETECTION ENGINE</div>
 
-        <h2>
-            Built for FiveM.
-        </h2>
+<h2>Built for FiveM.</h2>
 
-        <p class="section-description">
-            FiveM güvenliğine odaklanan
-            modern detection altyapısı.
-        </p>
+<p class="section-description">
+FiveM güvenliğine odaklanan
+modern detection altyapısı.
+</p>
 
-    </div>
+</div>
 
-    <div class="cards">
+<div class="cards">
 
-        <div class="card">
+<div class="card">
+<div class="card-icon">◈</div>
+<h3>FiveM Integrity</h3>
+<p>
+FiveM kurulumundaki ilgili
+bileşenleri analiz ederek
+standart dışı dosyaları
+inceleme adayı olarak ayırır.
+</p>
+</div>
 
-            <div class="card-icon">
-                ◈
-            </div>
+<div class="card">
+<div class="card-icon">⌁</div>
+<h3>Detection Logs</h3>
+<p>
+SHA-256 hash, dosya boyutu
+ve detection sebebi gibi
+teknik bilgilerle rapor oluşturur.
+</p>
+</div>
 
-            <h3>
-                FiveM Integrity
-            </h3>
+<div class="card">
+<div class="card-icon">✓</div>
+<h3>Risk Analysis</h3>
+<p>
+Sonuçları HIGH, REVIEW ve
+CLEAN kategorilerine ayırarak
+incelemeyi kolaylaştırır.
+</p>
+</div>
 
-            <p>
-                FiveM kurulumundaki ilgili
-                bileşenleri analiz ederek
-                standart dışı dosyaları
-                inceleme adayı olarak ayırır.
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <div class="card-icon">
-                ⌁
-            </div>
-
-            <h3>
-                Detection Logs
-            </h3>
-
-            <p>
-                SHA-256 hash, dosya boyutu
-                ve detection sebebi gibi
-                teknik bilgilerle rapor oluşturur.
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <div class="card-icon">
-                ✓
-            </div>
-
-            <h3>
-                Risk Analysis
-            </h3>
-
-            <p>
-                Sonuçları HIGH, REVIEW ve
-                CLEAN kategorilerine ayırarak
-                incelemeyi kolaylaştırır.
-            </p>
-
-        </div>
-
-    </div>
-
+</div>
 </section>
 
 <section id="security">
 
-    <div class="security-box">
+<div class="security-box">
 
-        <div class="eyebrow">
-            PRIVACY FIRST
-        </div>
+<div class="eyebrow">PRIVACY FIRST</div>
 
-        <h2>
-            Security without unnecessary data.
-        </h2>
+<h2>Security without unnecessary data.</h2>
 
-        <p class="section-description">
-            Xyron yalnızca güvenlik taraması
-            için gerekli bilgileri hedefleyecek
-            şekilde tasarlanır.
-        </p>
+<p class="section-description">
+Xyron yalnızca güvenlik taraması
+için gerekli bilgileri hedefleyecek
+şekilde tasarlanır.
+</p>
 
-    </div>
-
+</div>
 </section>
 
 <section id="download">
 
-    <div class="cta">
+<div class="cta">
 
-        <div class="eyebrow">
-            GET STARTED
-        </div>
+<div class="eyebrow">GET STARTED</div>
 
-        <h2>
-            Ready to scan?
-        </h2>
+<h2>Ready to scan?</h2>
 
-        <p class="section-description">
-            Xyron istemcisini indirmek için
-            geçerli bir lisans anahtarı gereklidir.
-        </p>
+<p class="section-description">
+Xyron istemcisini indirmek için
+geçerli bir lisans anahtarı gereklidir.
+</p>
 
-        <div class="buttons">
+<div class="buttons">
 
-            <button
-                class="button primary"
-                onclick="openLicenseLogin()"
-            >
-                Download Xyron
-            </button>
+<button
+class="button primary"
+onclick="openLicenseLogin()">
+Download Xyron
+</button>
 
-            <button
-                class="button secondary"
-                onclick="openAdminLogin()"
-            >
-                Admin Panel
-            </button>
+<button
+class="button secondary"
+onclick="openAdminLogin()">
+Admin Panel
+</button>
 
-        </div>
+</div>
 
-    </div>
-
+</div>
 </section>
 
 </main>
 
 <div id="licenseModal" class="modal">
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <button
-            class="modal-close"
-            onclick="closeModal('licenseModal')"
-        >
-            ×
-        </button>
+<button
+class="modal-close"
+onclick="closeModal('licenseModal')">
+×
+</button>
 
-        <div class="eyebrow">
-            XYRON LICENSE
-        </div>
+<div class="eyebrow">XYRON LICENSE</div>
 
-        <h2>
-            Enter License
-        </h2>
+<h2>Enter License</h2>
 
-        <p>
-            Yetkili tarafından verilen lisans
-            anahtarını gir.
-        </p>
+<p>
+Yetkili tarafından verilen lisans
+anahtarını gir.
+</p>
 
-        <input
-            id="licenseInput"
-            type="text"
-            placeholder="XYRON-XXXX-XXXX-XXXX"
-        >
+<input
+id="licenseInput"
+type="text"
+placeholder="XYRON-XXXX-XXXX-XXXX">
 
-        <button
-            class="modal-button"
-            onclick="checkLicense()"
-        >
-            Continue
-        </button>
+<button
+class="modal-button"
+onclick="checkLicense()">
+Continue
+</button>
 
-        <div id="licenseMessage" class="message"></div>
+<div id="licenseMessage" class="message"></div>
 
-    </div>
-
+</div>
 </div>
 
 <div id="adminModal" class="modal">
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <button
-            class="modal-close"
-            onclick="closeModal('adminModal')"
-        >
-            ×
-        </button>
+<button
+class="modal-close"
+onclick="closeModal('adminModal')">
+×
+</button>
 
-        <div class="eyebrow">
-            XYRON ADMIN
-        </div>
+<div class="eyebrow">XYRON ADMIN</div>
 
-        <h2>
-            Authorized Access
-        </h2>
+<h2>Authorized Access</h2>
 
-        <p>
-            Yönetici anahtarını gir.
-        </p>
+<p>Yönetici anahtarını gir.</p>
 
-        <input
-            id="adminKeyInput"
-            type="password"
-            placeholder="Admin Key"
-        >
+<input
+id="adminKeyInput"
+type="password"
+placeholder="Admin Key">
 
-        <button
-            class="modal-button"
-            onclick="adminLogin()"
-        >
-            Login
-        </button>
+<button
+class="modal-button"
+onclick="adminLogin()">
+Login
+</button>
 
-        <div id="adminMessage" class="message"></div>
+<div id="adminMessage" class="message"></div>
 
-    </div>
-
+</div>
 </div>
 
 <div id="dashboardModal" class="modal">
 
-    <div class="modal-box dashboard-box">
+<div class="modal-box dashboard-box">
 
-        <button
-            class="modal-close"
-            onclick="closeModal('dashboardModal')"
-        >
-            ×
-        </button>
+<button
+class="modal-close"
+onclick="closeModal('dashboardModal')">
+×
+</button>
 
-        <div class="eyebrow">
-            XYRON CONTROL
-        </div>
+<div class="eyebrow">XYRON CONTROL</div>
 
-        <h2>
-            License Dashboard
-        </h2>
+<h2>License Dashboard</h2>
 
-        <button
-            class="modal-button"
-            onclick="createLicense()"
-        >
-            + Create License
-        </button>
+<button
+class="modal-button"
+onclick="createLicense()">
++ Create License
+</button>
 
-        <div id="licenseList"></div>
+<div id="licenseList"></div>
 
-        <button
-            class="logout-button"
-            onclick="logoutAdmin()"
-        >
-            Logout
-        </button>
+<button
+class="logout-button"
+onclick="logoutAdmin()">
+Logout
+</button>
 
-    </div>
-
+</div>
 </div>
 
 <footer>
 
-    <span>
-        © 2026 Xyron Security
-    </span>
-
-    <span>
-        FiveM Detection Scanner
-    </span>
+<span>© 2026 Xyron Security</span>
+<span>FiveM Detection Scanner</span>
 
 </footer>
 
 <script>
 
 const API_URL =
-    "https://xyron-api-1.onrender.com";
+"https://xyron-api-1.onrender.com";
+
+const DOWNLOAD_URL =
+"https://github.com/notrace749-bot/xyron-scanner/raw/refs/heads/main/scanner.exe";
 
 let adminToken =
-    sessionStorage.getItem("xyron_admin_token");
+sessionStorage.getItem("xyron_admin_token");
 
 
-function openLicenseLogin() {
+function openLicenseLogin(){
 
-    document
-        .getElementById("licenseModal")
-        .classList.add("active");
-
-}
-
-
-function openAdminLogin() {
-
-    if (adminToken) {
-
-        openDashboard();
-
-        return;
-
-    }
-
-    document
-        .getElementById("adminModal")
-        .classList.add("active");
+document
+.getElementById("licenseModal")
+.classList.add("active");
 
 }
 
 
-function closeModal(id) {
+function openAdminLogin(){
 
-    document
-        .getElementById(id)
-        .classList.remove("active");
+if(adminToken){
+
+openDashboard();
+
+return;
+
+}
+
+document
+.getElementById("adminModal")
+.classList.add("active");
 
 }
 
 
-async function checkLicense() {
+function closeModal(id){
 
-    const input =
-        document.getElementById("licenseInput");
-
-    const message =
-        document.getElementById("licenseMessage");
-
-    const key =
-        input.value.trim();
-
-    if (!key) {
-
-        message.innerHTML =
-            "<span style='color:#ef7777'>Lisans anahtarı gir.</span>";
-
-        return;
-
-    }
-
-    message.textContent =
-        "Kontrol ediliyor...";
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL + "/license/check",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        license_key: key
-                    })
-                }
-            );
-
-        const data =
-            await response.json();
-
-        if (data.valid) {
-
-            message.innerHTML =
-                "<span style='color:#63dc9a'>✓ License valid.</span>";
-
-            setTimeout(() => {
-
-                closeModal("licenseModal");
-
-                alert(
-                    "Lisans doğrulandı. Xyron indirme bağlantısını bir sonraki adımda bağlayacağız."
-                );
-
-            }, 700);
-
-        } else {
-
-            message.innerHTML =
-                "<span style='color:#ef7777'>✕ Invalid or inactive license.</span>";
-
-        }
-
-    } catch (error) {
-
-        message.innerHTML =
-            "<span style='color:#ef7777'>API bağlantısı kurulamadı.</span>";
-
-    }
+document
+.getElementById(id)
+.classList.remove("active");
 
 }
 
 
-async function adminLogin() {
+/* LICENSE CHECK + DOWNLOAD */
 
-    const input =
-        document.getElementById("adminKeyInput");
+async function checkLicense(){
 
-    const message =
-        document.getElementById("adminMessage");
+const input =
+document.getElementById("licenseInput");
 
-    const key =
-        input.value.trim();
+const message =
+document.getElementById("licenseMessage");
 
-    if (!key) {
+const key =
+input.value.trim();
 
-        message.innerHTML =
-            "<span style='color:#ef7777'>Admin key gir.</span>";
 
-        return;
+if(!key){
 
-    }
+message.innerHTML =
+"<span style='color:#ef7777'>Lisans anahtarı gir.</span>";
 
-    message.textContent =
-        "Giriş yapılıyor...";
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL + "/admin/login",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        admin_key: key
-                    })
-                }
-            );
-
-        const data =
-            await response.json();
-
-        if (!response.ok) {
-
-            message.innerHTML =
-                "<span style='color:#ef7777'>✕ Hatalı admin key.</span>";
-
-            return;
-
-        }
-
-        adminToken =
-            data.token;
-
-        sessionStorage.setItem(
-            "xyron_admin_token",
-            adminToken
-        );
-
-        closeModal("adminModal");
-
-        openDashboard();
-
-    } catch (error) {
-
-        message.innerHTML =
-            "<span style='color:#ef7777'>API bağlantısı kurulamadı.</span>";
-
-    }
+return;
 
 }
 
 
-async function openDashboard() {
+message.innerHTML =
+"<span style='color:#aaa'>Lisans kontrol ediliyor...</span>";
 
-    document
-        .getElementById("dashboardModal")
-        .classList.add("active");
 
-    await loadLicenses();
+try{
+
+const response =
+await fetch(
+API_URL + "/license/check",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+license_key:key
+})
+}
+);
+
+
+const data =
+await response.json();
+
+
+if(!response.ok || !data.valid){
+
+message.innerHTML =
+"<span style='color:#ef7777'>✕ Geçersiz veya pasif lisans.</span>";
+
+return;
 
 }
 
 
-async function loadLicenses() {
+message.innerHTML =
+"<span style='color:#63dc9a'>✓ Lisans doğrulandı. İndirme başlıyor...</span>";
 
-    const list =
-        document.getElementById("licenseList");
 
-    list.innerHTML =
-        "<p style='color:#888;margin-top:20px'>Loading...</p>";
+setTimeout(()=>{
 
-    try {
+window.location.href =
+DOWNLOAD_URL;
 
-        const response =
-            await fetch(
-                API_URL + "/license/list",
-                {
-                    headers: {
-                        "Authorization":
-                            "Bearer " + adminToken
-                    }
-                }
-            );
+},800);
 
-        if (response.status === 401) {
 
-            logoutAdmin();
+}catch(error){
 
-            return;
+console.error(error);
 
-        }
+message.innerHTML =
+"<span style='color:#ef7777'>API bağlantısı kurulamadı.</span>";
 
-        const data =
-            await response.json();
-
-        list.innerHTML = "";
-
-        if (!data.licenses.length) {
-
-            list.innerHTML =
-                "<p style='color:#888;margin-top:20px'>Henüz lisans oluşturulmadı.</p>";
-
-            return;
-
-        }
-
-        data.licenses.forEach(
-            license => {
-
-                const item =
-                    document.createElement("div");
-
-                item.className =
-                    "license-item";
-
-                const status =
-                    license.active
-
-                    ? "<span class='active'>● ACTIVE</span>"
-
-                    : "<span class='revoked'>● REVOKED</span>";
-
-                item.innerHTML = `
-
-                    <div>
-
-                        <div class="license-key">
-                            ${license.license_key}
-                        </div>
-
-                        <div style="margin-top:7px">
-                            ${status}
-                        </div>
-
-                    </div>
-
-                    ${
-                        license.active
-                        ?
-                        `<button
-                            class="revoke-button"
-                            onclick="revokeLicense('${license.license_key}')"
-                        >
-                            Revoke
-                        </button>`
-                        :
-                        ""
-                    }
-
-                `;
-
-                list.appendChild(item);
-
-            }
-        );
-
-    } catch (error) {
-
-        list.innerHTML =
-            "<p style='color:#ef7777;margin-top:20px'>Lisanslar yüklenemedi.</p>";
-
-    }
+}
 
 }
 
 
-async function createLicense() {
+/* ADMIN LOGIN */
 
-    try {
+async function adminLogin(){
 
-        const response =
-            await fetch(
-                API_URL + "/license/create",
-                {
-                    method: "POST",
+const input =
+document.getElementById("adminKeyInput");
 
-                    headers: {
-                        "Authorization":
-                            "Bearer " + adminToken
-                    }
-                }
-            );
+const message =
+document.getElementById("adminMessage");
 
-        if (response.status === 401) {
+const key =
+input.value.trim();
 
-            logoutAdmin();
 
-            return;
+if(!key){
 
-        }
+message.innerHTML =
+"<span style='color:#ef7777'>Admin key gir.</span>";
 
-        const data =
-            await response.json();
-
-        if (data.success) {
-
-            await loadLicenses();
-
-            alert(
-                "Yeni lisans oluşturuldu:\n\n" +
-                data.license_key
-            );
-
-        }
-
-    } catch (error) {
-
-        alert(
-            "Lisans oluşturulamadı."
-        );
-
-    }
+return;
 
 }
 
 
-async function revokeLicense(key) {
+message.textContent =
+"Giriş yapılıyor...";
 
-    if (
-        !confirm(
-            "Bu lisansı iptal etmek istediğine emin misin?"
-        )
-    ) {
 
-        return;
+try{
 
-    }
+const response =
+await fetch(
+API_URL + "/admin/login",
+{
+method:"POST",
 
-    try {
+headers:{
+"Content-Type":
+"application/json"
+},
 
-        const response =
-            await fetch(
-                API_URL + "/license/revoke",
-                {
-                    method: "POST",
+body:JSON.stringify({
+admin_key:key
+})
+}
+);
 
-                    headers: {
 
-                        "Content-Type":
-                            "application/json",
+const data =
+await response.json();
 
-                        "Authorization":
-                            "Bearer " + adminToken
 
-                    },
+if(!response.ok){
 
-                    body: JSON.stringify({
-                        license_key: key
-                    })
-                }
-            );
+message.innerHTML =
+"<span style='color:#ef7777'>✕ Hatalı admin key.</span>";
 
-        if (response.status === 401) {
-
-            logoutAdmin();
-
-            return;
-
-        }
-
-        await loadLicenses();
-
-    } catch (error) {
-
-        alert(
-            "Lisans iptal edilemedi."
-        );
-
-    }
+return;
 
 }
 
 
-function logoutAdmin() {
+adminToken =
+data.token;
 
-    adminToken = null;
 
-    sessionStorage.removeItem(
-        "xyron_admin_token"
-    );
+sessionStorage.setItem(
+"xyron_admin_token",
+adminToken
+);
 
-    closeModal(
-        "dashboardModal"
-    );
+
+closeModal("adminModal");
+
+openDashboard();
+
+
+}catch(error){
+
+message.innerHTML =
+"<span style='color:#ef7777'>API bağlantısı kurulamadı.</span>";
+
+}
+
+}
+
+
+/* DASHBOARD */
+
+async function openDashboard(){
+
+document
+.getElementById("dashboardModal")
+.classList.add("active");
+
+await loadLicenses();
+
+}
+
+
+async function loadLicenses(){
+
+const list =
+document.getElementById("licenseList");
+
+list.innerHTML =
+"<p style='color:#888;margin-top:20px'>Loading...</p>";
+
+
+try{
+
+const response =
+await fetch(
+API_URL + "/license/list",
+{
+headers:{
+"Authorization":
+"Bearer " + adminToken
+}
+}
+);
+
+
+if(response.status===401){
+
+logoutAdmin();
+
+return;
+
+}
+
+
+const data =
+await response.json();
+
+
+list.innerHTML="";
+
+
+if(!data.licenses ||
+!data.licenses.length){
+
+list.innerHTML =
+"<p style='color:#888;margin-top:20px'>Henüz lisans oluşturulmadı.</p>";
+
+return;
+
+}
+
+
+data.licenses.forEach(
+license=>{
+
+const item =
+document.createElement("div");
+
+item.className =
+"license-item";
+
+
+const status =
+license.active
+
+?
+"<span class='active'>● ACTIVE</span>"
+
+:
+"<span class='revoked'>● REVOKED</span>";
+
+
+item.innerHTML=`
+
+<div>
+
+<div class="license-key">
+${license.license_key}
+</div>
+
+<div style="margin-top:7px">
+${status}
+</div>
+
+</div>
+
+${
+license.active
+?
+`<button
+class="revoke-button"
+onclick="revokeLicense('${license.license_key}')">
+Revoke
+</button>`
+:
+""
+}
+
+`;
+
+
+list.appendChild(item);
+
+}
+);
+
+
+}catch(error){
+
+list.innerHTML =
+"<p style='color:#ef7777;margin-top:20px'>Lisanslar yüklenemedi.</p>";
+
+}
+
+}
+
+
+/* CREATE LICENSE */
+
+async function createLicense(){
+
+try{
+
+const response =
+await fetch(
+API_URL + "/license/create",
+{
+method:"POST",
+
+headers:{
+"Authorization":
+"Bearer " + adminToken
+}
+}
+);
+
+
+if(response.status===401){
+
+logoutAdmin();
+
+return;
+
+}
+
+
+const data =
+await response.json();
+
+
+if(data.success){
+
+await loadLicenses();
+
+alert(
+"Yeni lisans oluşturuldu:\n\n"+
+data.license_key
+);
+
+}
+
+}catch(error){
+
+alert("Lisans oluşturulamadı.");
+
+}
+
+}
+
+
+/* REVOKE LICENSE */
+
+async function revokeLicense(key){
+
+if(!confirm(
+"Bu lisansı iptal etmek istediğine emin misin?"
+)){
+
+return;
+
+}
+
+
+try{
+
+const response =
+await fetch(
+API_URL + "/license/revoke",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json",
+
+"Authorization":
+"Bearer " + adminToken
+},
+
+body:JSON.stringify({
+license_key:key
+})
+}
+);
+
+
+if(response.status===401){
+
+logoutAdmin();
+
+return;
+
+}
+
+
+await loadLicenses();
+
+
+}catch(error){
+
+alert("Lisans iptal edilemedi.");
+
+}
+
+}
+
+
+/* LOGOUT */
+
+function logoutAdmin(){
+
+adminToken=null;
+
+sessionStorage.removeItem(
+"xyron_admin_token"
+);
+
+closeModal(
+"dashboardModal"
+);
 
 }
 
@@ -1510,3 +1213,4 @@ function logoutAdmin() {
 
 </body>
 </html>
+```
