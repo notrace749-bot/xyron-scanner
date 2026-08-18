@@ -1,1116 +1,708 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>XYRON — FiveM Security</title>
-
-    <meta
-        name="description"
-        content="Xyron — FiveM odaklı modern security scanner."
-    >
-
-    <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg: #030208;
-            --bg2: #080510;
-            --card: rgba(13, 9, 22, .72);
-            --border: rgba(255,255,255,.08);
-            --text: #f7f3ff;
-            --muted: #928a9f;
-            --purple: #7c3cff;
-            --purple2: #b17cff;
-            --glow: rgba(124,60,255,.35);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background: #030208;
-            color: var(--text);
-            font-family:
-                Inter,
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-
-        /* =====================================================
-           ANIMATED BACKGROUND
-        ===================================================== */
-
-        .background {
-            position: fixed;
-            inset: 0;
-            z-index: -10;
-            overflow: hidden;
-            pointer-events: none;
-            background:
-                radial-gradient(
-                    circle at 50% -20%,
-                    rgba(124,60,255,.20),
-                    transparent 38%
-                ),
-                #030208;
-        }
-
-
-        .orb {
-            position: absolute;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>XYRON — FiveM Security</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #030208;
+    --card: rgba(15,10,25,.92);
+    --border: rgba(255,255,255,.08);
+    --text: #f7f3ff;
+    --muted: #928a9f;
+    --purple: #7c3cff;
+    --purple2: #b17cff;
+}
+
+body {
+    min-height: 100vh;
+    background: #030208;
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+/* BACKGROUND */
+
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -5;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(124,60,255,.22),
+            transparent 40%
+        ),
+        #030208;
+}
+
+.orb {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: .22;
+}
+
+.orb.one {
+    background: #6427ff;
+    left: -180px;
+    top: 10%;
+    animation: moveOne 15s infinite alternate ease-in-out;
+}
+
+.orb.two {
+    background: #9b55ff;
+    right: -180px;
+    top: 25%;
+    animation: moveTwo 18s infinite alternate ease-in-out;
+}
+
+@keyframes moveOne {
+    to {
+        transform: translate(180px,80px) scale(1.2);
+    }
+}
+
+@keyframes moveTwo {
+    to {
+        transform: translate(-160px,120px) scale(1.2);
+    }
+}
+
+/* NAV */
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    background: rgba(3,2,8,.78);
+    border-bottom: 1px solid var(--border);
+
+    backdrop-filter: blur(20px);
+}
 
-            width: 520px;
-            height: 520px;
-
-            border-radius: 50%;
-
-            filter: blur(90px);
-
-            opacity: .22;
-        }
-
-        .orb.one {
-            background: #6427ff;
-
-            left: -180px;
-            top: 10%;
-
-            animation:
-                orbOne 15s ease-in-out infinite alternate;
-        }
-
-        .orb.two {
-            background: #9b55ff;
-
-            right: -200px;
-            top: 25%;
-
-            animation:
-                orbTwo 18s ease-in-out infinite alternate;
-        }
-
-        .orb.three {
-            background: #4a18b8;
+.logo {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 5px;
+}
 
-            left: 35%;
-            bottom: -300px;
+.logo span {
+    color: var(--purple2);
+}
 
-            animation:
-                orbThree 20s ease-in-out infinite alternate;
-        }
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
 
+.nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+}
 
-        @keyframes orbOne {
+.nav-links a:hover {
+    color: white;
+}
 
-            0% {
-                transform:
-                    translate3d(0,0,0)
-                    scale(1);
-            }
+.nav-button {
+    color: white;
+    text-decoration: none;
 
-            100% {
-                transform:
-                    translate3d(180px,80px,0)
-                    scale(1.25);
-            }
-        }
+    padding: 11px 19px;
+    border-radius: 9px;
 
-        @keyframes orbTwo {
+    font-size: 13px;
+    font-weight: 800;
 
-            0% {
-                transform:
-                    translate3d(0,0,0)
-                    scale(1);
-            }
+    background: linear-gradient(
+        135deg,
+        #7132ef,
+        #9d62ff
+    );
+}
 
-            100% {
-                transform:
-                    translate3d(-160px,120px,0)
-                    scale(1.2);
-            }
-        }
+/* HERO */
 
-        @keyframes orbThree {
+.hero {
+    min-height: 820px;
+    max-width: 1200px;
+    margin: auto;
 
-            0% {
-                transform:
-                    translate3d(0,0,0)
-                    scale(1);
-            }
+    padding: 120px 7%;
 
-            100% {
-                transform:
-                    translate3d(-100px,-120px,0)
-                    scale(1.3);
-            }
-        }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
+    text-align: center;
+}
 
-        /* GRID */
+.badge {
+    padding: 8px 15px;
+    border-radius: 999px;
 
-        .grid {
-            position: fixed;
-            inset: 0;
+    color: #c7b1ff;
 
-            z-index: -8;
+    border: 1px solid rgba(168,117,255,.3);
 
-            pointer-events: none;
+    background: rgba(124,60,255,.08);
 
-            opacity: .18;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
 
-            background-image:
-                linear-gradient(
-                    rgba(255,255,255,.035) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(255,255,255,.035) 1px,
-                    transparent 1px
-                );
+h1 {
+    margin-top: 30px;
 
-            background-size: 70px 70px;
+    font-size: clamp(58px,9vw,110px);
 
-            mask-image:
-                radial-gradient(
-                    ellipse at center,
-                    black 10%,
-                    transparent 80%
-                );
+    line-height: .92;
 
-            animation:
-                gridMove 22s linear infinite;
-        }
+    letter-spacing: -6px;
+}
 
-        @keyframes gridMove {
+.gradient {
+    background: linear-gradient(
+        100deg,
+        white,
+        #c7a8ff,
+        #713cff
+    );
 
-            from {
-                transform: translateY(0);
-            }
+    -webkit-background-clip: text;
+    background-clip: text;
 
-            to {
-                transform: translateY(70px);
-            }
-        }
+    color: transparent;
+}
 
+.hero-text {
+    max-width: 700px;
 
-        /* MOUSE GLOW */
+    margin-top: 30px;
 
-        #mouseGlow {
-            position: fixed;
+    color: var(--muted);
 
-            width: 400px;
-            height: 400px;
+    font-size: 17px;
+    line-height: 1.8;
+}
 
-            border-radius: 50%;
+.buttons {
+    display: flex;
+    gap: 13px;
 
-            pointer-events: none;
+    margin-top: 35px;
 
-            z-index: -6;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-            transform:
-                translate(-50%, -50%);
+.button {
+    display: inline-block;
 
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(124,60,255,.13),
-                    transparent 68%
-                );
+    padding: 14px 24px;
 
-            filter: blur(20px);
+    border-radius: 10px;
 
-            transition:
-                left .15s ease-out,
-                top .15s ease-out;
-        }
+    text-decoration: none;
 
+    font-size: 13px;
+    font-weight: 800;
 
-        /* PARTICLES */
+    cursor: pointer;
 
-        .particle {
-            position: fixed;
+    transition: .25s;
+}
 
-            width: 2px;
-            height: 2px;
+.primary {
+    color: white;
 
-            border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        #7132ef,
+        #a064ff
+    );
 
-            background: #ad82ff;
+    border: none;
+}
 
-            box-shadow:
-                0 0 10px #7c3cff,
-                0 0 20px rgba(124,60,255,.7);
+.primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 50px rgba(124,60,255,.4);
+}
 
-            pointer-events: none;
+.secondary {
+    color: #ddd7e8;
 
-            z-index: -5;
+    background: rgba(255,255,255,.025);
 
-            opacity: .5;
-        }
+    border: 1px solid var(--border);
+}
 
+.secondary:hover {
+    background: rgba(255,255,255,.07);
+}
 
-        /* =====================================================
-           NAVBAR
-        ===================================================== */
+/* PREVIEW */
 
-        nav {
-            position: sticky;
+.preview {
+    width: min(850px,100%);
+    margin-top: 80px;
 
-            top: 0;
+    padding: 1px;
 
-            z-index: 100;
+    border-radius: 18px;
 
-            width: 100%;
-            height: 78px;
+    background: linear-gradient(
+        135deg,
+        rgba(124,60,255,.5),
+        transparent
+    );
+}
 
-            display: flex;
+.terminal {
+    padding: 22px;
 
-            align-items: center;
+    border-radius: 18px;
 
-            justify-content: space-between;
+    background: rgba(8,6,12,.96);
 
-            padding: 0 7%;
+    text-align: left;
+}
 
-            background:
-                rgba(3,2,8,.68);
+.terminal-top {
+    display: flex;
+    justify-content: space-between;
 
-            border-bottom:
-                1px solid var(--border);
+    padding-bottom: 15px;
 
-            backdrop-filter:
-                blur(20px);
-        }
+    border-bottom: 1px solid var(--border);
 
+    font-size: 11px;
+}
 
-        .logo {
-            color: white;
+.online {
+    color: #63dc9a;
+}
 
-            text-decoration: none;
+.scan-line {
+    display: flex;
+    justify-content: space-between;
 
-            font-size: 22px;
+    padding: 17px 4px;
 
-            font-weight: 900;
+    border-bottom: 1px solid rgba(255,255,255,.05);
 
-            letter-spacing: 5px;
-        }
+    font-size: 13px;
+}
 
-        .logo span {
-            color: var(--purple2);
+.scan-label {
+    color: #aaa2b6;
+}
 
-            text-shadow:
-                0 0 20px
-                rgba(177,124,255,.7);
-        }
+.scan-ok {
+    color: #64dc9b;
+}
 
+/* SECTIONS */
 
-        .nav-links {
-            display: flex;
+section {
+    max-width: 1200px;
+    margin: auto;
 
-            gap: 32px;
-        }
+    padding: 110px 7%;
+}
 
-        .nav-links a {
-            color: var(--muted);
+.section-head {
+    text-align: center;
+}
 
-            text-decoration: none;
+.eyebrow {
+    color: #a27aff;
 
-            font-size: 13px;
+    font-size: 10px;
 
-            transition: .25s;
-        }
+    font-weight: 900;
 
-        .nav-links a:hover {
-            color: white;
-        }
+    letter-spacing: 3px;
+}
 
+h2 {
+    margin-top: 14px;
 
-        .nav-button {
-            color: white;
+    font-size: 43px;
 
-            text-decoration: none;
+    letter-spacing: -2px;
+}
 
-            padding: 11px 19px;
+.section-description {
+    max-width: 700px;
+    margin: 17px auto 0;
 
-            border-radius: 9px;
+    color: var(--muted);
 
-            font-size: 13px;
+    line-height: 1.8;
+}
 
-            font-weight: 800;
+/* CARDS */
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #7132ef,
-                    #9d62ff
-                );
+.cards {
+    display: grid;
 
-            box-shadow:
-                0 0 30px
-                rgba(124,60,255,.28);
+    grid-template-columns:
+        repeat(3,1fr);
 
-            transition: .25s;
-        }
+    gap: 16px;
 
-        .nav-button:hover {
-            transform: translateY(-2px);
+    margin-top: 48px;
+}
 
-            box-shadow:
-                0 0 40px
-                rgba(124,60,255,.55);
-        }
+.card {
+    padding: 30px;
 
+    border: 1px solid var(--border);
 
-        /* =====================================================
-           HERO
-        ===================================================== */
+    border-radius: 16px;
 
-        .hero {
-            position: relative;
+    background: rgba(255,255,255,.025);
+}
 
-            min-height: 850px;
+.card:hover {
+    border-color: rgba(124,60,255,.4);
+    transform: translateY(-5px);
+}
 
-            max-width: 1250px;
+.card-icon {
+    font-size: 25px;
+    color: #bd9dff;
 
-            margin: auto;
+    margin-bottom: 20px;
+}
 
-            padding:
-                120px 7%
-                100px;
+.card h3 {
+    margin-bottom: 10px;
+}
 
-            display: flex;
+.card p {
+    color: var(--muted);
 
-            flex-direction: column;
+    font-size: 13px;
 
-            align-items: center;
+    line-height: 1.7;
+}
 
-            justify-content: center;
+/* SECURITY */
 
-            text-align: center;
-        }
+.security-box,
+.cta {
+    padding: 70px 35px;
 
+    text-align: center;
 
-        .badge {
-            display: inline-flex;
+    border: 1px solid rgba(124,60,255,.2);
 
-            align-items: center;
+    border-radius: 20px;
 
-            gap: 9px;
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(124,60,255,.15),
+            transparent 60%
+        ),
+        rgba(10,8,15,.85);
+}
 
-            padding:
-                8px 14px;
+/* MODAL */
 
-            border:
-                1px solid
-                rgba(168,117,255,.28);
+.modal {
+    display: none;
 
-            border-radius: 999px;
+    position: fixed;
 
-            background:
-                rgba(124,60,255,.08);
+    inset: 0;
 
-            color: #c7b1ff;
+    z-index: 9999;
 
-            font-size: 10px;
+    align-items: center;
+    justify-content: center;
 
-            font-weight: 900;
+    padding: 20px;
 
-            letter-spacing: 2px;
+    background: rgba(0,0,0,.78);
 
-            box-shadow:
-                0 0 35px
-                rgba(124,60,255,.08);
-        }
+    backdrop-filter: blur(15px);
+}
 
+.modal.active {
+    display: flex;
+}
 
-        .badge-dot {
-            width: 7px;
-            height: 7px;
+.modal-box {
+    position: relative;
 
-            border-radius: 50%;
+    width: min(520px,100%);
 
-            background: #a875ff;
+    padding: 35px;
 
-            box-shadow:
-                0 0 14px
-                #a875ff;
+    border-radius: 20px;
 
-            animation:
-                pulseDot 2s ease-in-out infinite;
-        }
+    border: 1px solid rgba(124,60,255,.25);
 
-        @keyframes pulseDot {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20,14,31,.98),
+            rgba(7,6,12,.98)
+        );
 
-            0%,100% {
-                opacity: .45;
-                transform: scale(.8);
-            }
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.7);
+}
 
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-        }
+.modal-close {
+    position: absolute;
 
+    right: 18px;
+    top: 12px;
 
-        h1 {
-            margin-top: 30px;
+    border: none;
 
-            font-size:
-                clamp(58px, 9vw, 110px);
+    background: none;
 
-            line-height: .91;
+    color: #aaa;
 
-            letter-spacing: -6px;
+    font-size: 28px;
 
-            font-weight: 950;
-        }
+    cursor: pointer;
+}
 
+.modal-box h2 {
+    margin-top: 12px;
+}
 
-        .gradient {
-            background:
-                linear-gradient(
-                    100deg,
-                    #ffffff 15%,
-                    #c7a8ff 55%,
-                    #713cff 90%
-                );
+.modal-box p {
+    margin-top: 10px;
 
-            -webkit-background-clip: text;
+    color: var(--muted);
 
-            background-clip: text;
+    line-height: 1.6;
+}
 
-            color: transparent;
+.modal-box input {
+    width: 100%;
 
-            filter:
-                drop-shadow(
-                    0 0 35px
-                    rgba(124,60,255,.15)
-                );
-        }
+    margin-top: 22px;
 
+    padding: 15px;
 
-        .hero-text {
-            max-width: 700px;
+    border-radius: 10px;
 
-            margin-top: 30px;
+    border: 1px solid rgba(255,255,255,.1);
 
-            color: var(--muted);
+    background: rgba(255,255,255,.04);
 
-            font-size: 17px;
+    color: white;
 
-            line-height: 1.8;
-        }
+    outline: none;
+}
 
+.modal-box input:focus {
+    border-color: rgba(124,60,255,.6);
+}
 
-        .buttons {
-            display: flex;
+.modal-button {
+    width: 100%;
 
-            gap: 13px;
+    margin-top: 15px;
 
-            margin-top: 38px;
+    padding: 14px;
 
-            flex-wrap: wrap;
+    border: none;
 
-            justify-content: center;
-        }
+    border-radius: 10px;
 
+    color: white;
 
-        .button {
-            position: relative;
+    font-weight: 800;
 
-            overflow: hidden;
+    cursor: pointer;
 
-            display: inline-block;
+    background:
+        linear-gradient(
+            135deg,
+            #7132ef,
+            #9d62ff
+        );
+}
 
-            padding:
-                14px 24px;
+.message {
+    margin-top: 15px;
 
-            border-radius: 10px;
+    font-size: 13px;
+}
 
-            font-size: 13px;
+.dashboard-box {
+    width: min(700px,100%);
 
-            font-weight: 850;
+    max-height: 85vh;
 
-            text-decoration: none;
+    overflow-y: auto;
+}
 
-            transition: .25s;
-        }
+.license-item {
+    display: flex;
 
+    align-items: center;
 
-        .button-primary {
-            color: white;
+    justify-content: space-between;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #7132ef,
-                    #a064ff
-                );
+    gap: 15px;
 
-            box-shadow:
-                0 12px 50px
-                rgba(124,60,255,.28);
-        }
+    margin-top: 12px;
 
-        .button-primary::after {
-            content: "";
+    padding: 15px;
 
-            position: absolute;
+    border-radius: 10px;
 
-            width: 100px;
-            height: 200%;
+    background: rgba(255,255,255,.035);
 
-            top: -50%;
+    border: 1px solid rgba(255,255,255,.07);
+}
 
-            left: -150px;
+.license-key {
+    color: #c8adff;
 
-            transform: rotate(25deg);
+    font-family: monospace;
+}
 
-            background:
-                rgba(255,255,255,.18);
+.active {
+    color: #63dc9a;
+}
 
-            transition:
-                left .5s;
-        }
+.revoked {
+    color: #ef7777;
+}
 
-        .button-primary:hover::after {
-            left: 130%;
-        }
+.revoke-button {
+    border: none;
 
-        .button-primary:hover {
-            transform: translateY(-3px);
+    border-radius: 7px;
 
-            box-shadow:
-                0 18px 60px
-                rgba(124,60,255,.48);
-        }
+    padding: 8px 11px;
 
+    color: white;
 
-        .button-secondary {
-            color: #ddd7e8;
+    background: rgba(220,70,90,.2);
 
-            background:
-                rgba(255,255,255,.025);
+    cursor: pointer;
+}
 
-            border:
-                1px solid
-                var(--border);
-        }
+.logout-button {
+    width: 100%;
 
-        .button-secondary:hover {
-            background:
-                rgba(255,255,255,.07);
+    margin-top: 20px;
 
-            transform:
-                translateY(-2px);
-        }
+    padding: 12px;
 
+    border-radius: 9px;
 
-        .hero-note {
-            margin-top: 17px;
+    border: 1px solid var(--border);
 
-            color: #5e5868;
+    background: rgba(255,255,255,.03);
 
-            font-size: 11px;
-        }
+    color: #aaa;
 
+    cursor: pointer;
+}
 
-        /* =====================================================
-           SCANNER PREVIEW
-        ===================================================== */
+/* FOOTER */
 
-        .preview {
-            position: relative;
+footer {
+    padding: 32px 7%;
 
-            width:
-                min(870px, 100%);
+    display: flex;
 
-            margin-top: 80px;
+    justify-content: space-between;
 
-            padding: 1px;
+    border-top: 1px solid var(--border);
 
-            border-radius: 19px;
+    color: #625d6c;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(124,60,255,.5),
-                    transparent 38%,
-                    rgba(124,60,255,.18)
-                );
+    font-size: 12px;
+}
 
-            box-shadow:
-                0 40px 110px
-                rgba(0,0,0,.65);
-        }
+/* MOBILE */
 
+@media(max-width:850px) {
 
-        .terminal {
-            border-radius: 18px;
+    .nav-links {
+        display: none;
+    }
 
-            padding: 22px;
+    .cards {
+        grid-template-columns: 1fr;
+    }
 
-            text-align: left;
+    h1 {
+        font-size: 60px;
+        letter-spacing: -4px;
+    }
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(17,13,26,.96),
-                    rgba(6,6,10,.96)
-                );
+    h2 {
+        font-size: 35px;
+    }
 
-            border:
-                1px solid
-                rgba(255,255,255,.06);
+    footer {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
 
-            backdrop-filter:
-                blur(20px);
-        }
-
-
-        .terminal-top {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            padding-bottom: 16px;
-
-            border-bottom:
-                1px solid
-                var(--border);
-
-            color: #827b8e;
-
-            font-size: 11px;
-        }
-
-
-        .terminal-title {
-            color: #ddd5e9;
-
-            font-weight: 900;
-
-            letter-spacing: 1px;
-        }
-
-
-        .online {
-            color: #63dc9a;
-
-            text-shadow:
-                0 0 12px
-                rgba(99,220,154,.4);
-        }
-
-
-        .scan-line {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            padding: 17px 4px;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.045);
-
-            font-size: 13px;
-        }
-
-
-        .scan-line:last-child {
-            border-bottom: none;
-        }
-
-
-        .scan-label {
-            color: #aaa2b6;
-        }
-
-
-        .scan-ok {
-            color: #64dc9b;
-        }
-
-
-        .scan-review {
-            color: #e9bf69;
-        }
-
-
-        .scan-number {
-            color: #c6b4ff;
-
-            font-weight: 850;
-        }
-
-
-        /* =====================================================
-           SECTIONS
-        ===================================================== */
-
-        section {
-            max-width: 1200px;
-
-            margin: auto;
-
-            padding:
-                110px 7%;
-        }
-
-
-        .section-head {
-            max-width: 700px;
-
-            margin: auto;
-
-            text-align: center;
-        }
-
-
-        .eyebrow {
-            color: #a27aff;
-
-            font-size: 10px;
-
-            font-weight: 900;
-
-            letter-spacing: 3px;
-
-            text-transform: uppercase;
-        }
-
-
-        h2 {
-            margin-top: 14px;
-
-            font-size: 43px;
-
-            letter-spacing: -2px;
-        }
-
-
-        .section-description {
-            color: var(--muted);
-
-            line-height: 1.8;
-
-            margin-top: 17px;
-        }
-
-
-        /* =====================================================
-           CARDS
-        ===================================================== */
-
-        .cards {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 16px;
-
-            margin-top: 48px;
-        }
-
-
-        .card {
-            position: relative;
-
-            padding: 29px;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 16px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.035),
-                    rgba(255,255,255,.012)
-                );
-
-            backdrop-filter:
-                blur(14px);
-
-            transition:
-                .3s;
-        }
-
-
-        .card:hover {
-            transform:
-                translateY(-7px);
-
-            border-color:
-                rgba(124,60,255,.4);
-
-            box-shadow:
-                0 25px 60px
-                rgba(0,0,0,.35),
-                0 0 35px
-                rgba(124,60,255,.08);
-        }
-
-
-        .card-icon {
-            width: 44px;
-            height: 44px;
-
-            display: grid;
-
-            place-items: center;
-
-            margin-bottom: 22px;
-
-            border-radius: 11px;
-
-            color: #bd9dff;
-
-            background:
-                rgba(124,60,255,.12);
-
-            box-shadow:
-                inset 0 0 20px
-                rgba(124,60,255,.05);
-        }
-
-
-        .card h3 {
-            font-size: 17px;
-
-            margin-bottom: 11px;
-        }
-
-
-        .card p {
-            color: var(--muted);
-
-            font-size: 13px;
-
-            line-height: 1.7;
-        }
-
-
-        /* =====================================================
-           SECURITY
-        ===================================================== */
-
-        .security-box {
-            position: relative;
-
-            overflow: hidden;
-
-            border:
-                1px solid
-                rgba(124,60,255,.18);
-
-            border-radius: 21px;
-
-            padding:
-                75px 40px;
-
-            text-align: center;
-
-            background:
-                radial-gradient(
-                    circle at 50% 0%,
-                    rgba(124,60,255,.16),
-                    transparent 58%
-                ),
-                rgba(11,9,16,.8);
-
-            backdrop-filter:
-                blur(20px);
-
-            box-shadow:
-                0 30px 90px
-                rgba(0,0,0,.3);
-        }
-
-
-        .security-box::before {
-            content: "";
-
-            position: absolute;
-
-            width: 300px;
-            height: 300px;
-
-            left: 50%;
-            top: -250px;
-
-            transform:
-                translateX(-50%);
-
-            border-radius: 50%;
-
-            background:
-                rgba(124,60,255,.18);
-
-            filter:
-                blur(80px);
-        }
-
-
-        /* =====================================================
-           CTA
-        ===================================================== */
-
-        .cta {
-            text-align: center;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 21px;
-
-            padding:
-                75px 30px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(124,60,255,.11),
-                    rgba(255,255,255,.015)
-                );
-
-            box-shadow:
-                0 30px 90px
-                rgba(0,0,0,.3);
-        }
-
-
-        /* =====================================================
-           FOOTER
-        ===================================================== */
-
-        footer {
-            border-top:
-                1px solid
-                var(--border);
-
-            padding:
-                32px 7%;
-
-            display: flex;
-
-            justify-content:
-                space-between;
-
-            color: #625d6c;
-
-            font-size: 12px;
-        }
-
-
-        /* =====================================================
-           MOBILE
-        ===================================================== */
-
-        @media(max-width: 850px) {
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                min-height: 750px;
-
-                padding-top: 90px;
-            }
-
-            h1 {
-                font-size:
-                    clamp(52px, 15vw, 85px);
-
-                letter-spacing: -4px;
-            }
-
-            .hero-text {
-                font-size: 15px;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-            }
-
-            h2 {
-                font-size: 35px;
-            }
-
-            .orb {
-                transform:
-                    scale(.7);
-            }
-
-            footer {
-                flex-direction: column;
-
-                gap: 10px;
-
-                text-align: center;
-            }
-        }
-
-    </style>
+</style>
 </head>
-
 
 <body>
 
-
-<!-- =========================================================
-     BACKGROUND
-========================================================= -->
-
 <div class="background">
-
     <div class="orb one"></div>
-
     <div class="orb two"></div>
-
-    <div class="orb three"></div>
-
 </div>
-
-<div class="grid"></div>
-
-<div id="mouseGlow"></div>
-
-
-<!-- =========================================================
-     NAVBAR
-========================================================= -->
 
 <nav>
 
     <a href="#" class="logo">
         XYR<span>O</span>N
     </a>
-
 
     <div class="nav-links">
 
@@ -1128,97 +720,54 @@
 
     </div>
 
-
-    <a
-        href="#download"
-        class="nav-button"
-    >
+    <a href="#download" class="nav-button">
         Get Xyron
     </a>
 
 </nav>
 
-
-<!-- =========================================================
-     HERO
-========================================================= -->
-
 <main>
 
 <section class="hero">
 
-
     <div class="badge">
-
-        <span class="badge-dot"></span>
-
-        FIVEM SECURITY · V2.1
-
+        ● FIVEM SECURITY · V2.1
     </div>
 
-
     <h1>
-
         Detect smarter.<br>
-
         <span class="gradient">
             Play safer.
         </span>
-
     </h1>
 
-
     <p class="hero-text">
-
         Xyron, FiveM odaklı modern bir
         güvenlik ve bütünlük tarayıcısıdır.
         Şüpheli dosyaları, süreçleri ve
         FiveM bileşenlerini analiz ederek
         anlaşılır detection raporları oluşturur.
-
     </p>
-
 
     <div class="buttons">
 
-        <a
-            href="#download"
-            class="button button-primary"
-        >
+        <a href="#download" class="button primary">
             Download Xyron
         </a>
 
-
-        <a
-            href="#features"
-            class="button button-secondary"
-        >
+        <a href="#features" class="button secondary">
             Explore Scanner
         </a>
 
     </div>
 
-
-    <p class="hero-note">
-
-        Kullanıcı tarafından başlatılır ·
-        Dosyalar otomatik olarak silinmez
-
-    </p>
-
-
-    <!-- =====================================================
-         SCANNER PREVIEW
-    ===================================================== -->
-
     <div class="preview">
 
         <div class="terminal">
 
-
             <div class="terminal-top">
 
-                <span class="terminal-title">
+                <span>
                     XYRON SECURITY SCANNER
                 </span>
 
@@ -1228,9 +777,7 @@
 
             </div>
 
-
             <div class="scan-line">
-
                 <span class="scan-label">
                     System Environment
                 </span>
@@ -1238,12 +785,9 @@
                 <span class="scan-ok">
                     DETECTED
                 </span>
-
             </div>
 
-
             <div class="scan-line">
-
                 <span class="scan-label">
                     FiveM Installation
                 </span>
@@ -1251,25 +795,19 @@
                 <span class="scan-ok">
                     VERIFIED
                 </span>
-
             </div>
 
-
             <div class="scan-line">
-
                 <span class="scan-label">
                     File Analysis
                 </span>
 
-                <span class="scan-number">
+                <span class="scan-ok">
                     ACTIVE
                 </span>
-
             </div>
 
-
             <div class="scan-line">
-
                 <span class="scan-label">
                     High Risk
                 </span>
@@ -1277,20 +815,6 @@
                 <span class="scan-ok">
                     0
                 </span>
-
-            </div>
-
-
-            <div class="scan-line">
-
-                <span class="scan-label">
-                    Review Candidates
-                </span>
-
-                <span class="scan-review">
-                    0
-                </span>
-
             </div>
 
         </div>
@@ -1299,39 +823,26 @@
 
 </section>
 
-
-<!-- =========================================================
-     FEATURES
-========================================================= -->
-
 <section id="features">
-
 
     <div class="section-head">
 
         <div class="eyebrow">
-            Detection Engine
+            DETECTION ENGINE
         </div>
-
 
         <h2>
             Built for FiveM.
         </h2>
 
-
         <p class="section-description">
-
-            Gereksiz sistem taramalarından uzak,
-            FiveM güvenliğine odaklanan bir
-            detection altyapısı.
-
+            FiveM güvenliğine odaklanan
+            modern detection altyapısı.
         </p>
 
     </div>
 
-
     <div class="cards">
-
 
         <div class="card">
 
@@ -1344,16 +855,13 @@
             </h3>
 
             <p>
-
                 FiveM kurulumundaki ilgili
-                çalıştırılabilir dosyaları analiz
-                ederek standart dışı bileşenleri
+                bileşenleri analiz ederek
+                standart dışı dosyaları
                 inceleme adayı olarak ayırır.
-
             </p>
 
         </div>
-
 
         <div class="card">
 
@@ -1366,16 +874,12 @@
             </h3>
 
             <p>
-
-                SHA-256 hash, dosya boyutu,
-                değiştirilme zamanı ve detection
-                sebebi gibi teknik bilgilerle
-                ayrıntılı rapor oluşturur.
-
+                SHA-256 hash, dosya boyutu
+                ve detection sebebi gibi
+                teknik bilgilerle rapor oluşturur.
             </p>
 
         </div>
-
 
         <div class="card">
 
@@ -1388,106 +892,71 @@
             </h3>
 
             <p>
-
                 Sonuçları HIGH, REVIEW ve
                 CLEAN kategorilerine ayırarak
-                false-positive oranını azaltmaya
-                yardımcı olur.
-
+                incelemeyi kolaylaştırır.
             </p>
 
         </div>
-
 
     </div>
 
 </section>
 
-
-<!-- =========================================================
-     SECURITY
-========================================================= -->
-
 <section id="security">
-
 
     <div class="security-box">
 
         <div class="eyebrow">
-            Privacy First
+            PRIVACY FIRST
         </div>
-
 
         <h2>
             Security without unnecessary data.
         </h2>
 
-
         <p class="section-description">
-
-            Xyron yalnızca FiveM güvenlik taraması
+            Xyron yalnızca güvenlik taraması
             için gerekli bilgileri hedefleyecek
-            şekilde tasarlanır. Şifreler, cookie'ler,
-            tarayıcı geçmişi veya kişisel belgeler
-            taranmaz.
-
+            şekilde tasarlanır.
         </p>
 
     </div>
 
 </section>
 
-
-<!-- =========================================================
-     DOWNLOAD
-========================================================= -->
-
 <section id="download">
-
 
     <div class="cta">
 
         <div class="eyebrow">
-            Get Started
+            GET STARTED
         </div>
-
 
         <h2>
             Ready to scan?
         </h2>
 
-
         <p class="section-description">
-
-            Xyron istemcisini indir ve FiveM
-            güvenlik taramasını başlat.
-
+            Xyron istemcisini indirmek için
+            geçerli bir lisans anahtarı gereklidir.
         </p>
-
 
         <div class="buttons">
 
-            <!--
-                LİSANS SİSTEMİ HAZIR OLDUĞUNDA
-                BU BUTON BURAYA BAĞLANACAK.
-            -->
-
-            <a
-                href="#"
-                class="button button-primary"
-                onclick="downloadNotReady(event)"
+            <button
+                class="button primary"
+                onclick="openLicenseLogin()"
             >
                 Download Xyron
-            </a>
+            </button>
 
-
-            <a
-                href="#"
-                class="button button-secondary"
-                onclick="panelNotReady(event)"
+            <button
+                class="button secondary"
+                onclick="openAdminLogin()"
             >
-                Open Dashboard
-            </a>
+                Admin Panel
+            </button>
 
         </div>
 
@@ -1497,10 +966,135 @@
 
 </main>
 
+<!-- LICENSE MODAL -->
 
-<!-- =========================================================
-     FOOTER
-========================================================= -->
+<div id="licenseModal" class="modal">
+
+    <div class="modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeModal('licenseModal')"
+        >
+            ×
+        </button>
+
+        <div class="eyebrow">
+            XYRON LICENSE
+        </div>
+
+        <h2>
+            Enter License
+        </h2>
+
+        <p>
+            Yetkili tarafından verilen lisans
+            anahtarını gir.
+        </p>
+
+        <input
+            id="licenseInput"
+            type="text"
+            placeholder="XYRON-XXXX-XXXX-XXXX"
+        >
+
+        <button
+            class="modal-button"
+            onclick="checkLicense()"
+        >
+            Continue
+        </button>
+
+        <div id="licenseMessage" class="message"></div>
+
+    </div>
+
+</div>
+
+<!-- ADMIN LOGIN -->
+
+<div id="adminModal" class="modal">
+
+    <div class="modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeModal('adminModal')"
+        >
+            ×
+        </button>
+
+        <div class="eyebrow">
+            XYRON ADMIN
+        </div>
+
+        <h2>
+            Authorized Access
+        </h2>
+
+        <p>
+            Yönetici anahtarını gir.
+        </p>
+
+        <input
+            id="adminKeyInput"
+            type="password"
+            placeholder="Admin Key"
+        >
+
+        <button
+            class="modal-button"
+            onclick="adminLogin()"
+        >
+            Login
+        </button>
+
+        <div id="adminMessage" class="message"></div>
+
+    </div>
+
+</div>
+
+<!-- ADMIN DASHBOARD -->
+
+<div id="dashboardModal" class="modal">
+
+    <div class="modal-box dashboard-box">
+
+        <button
+            class="modal-close"
+            onclick="closeModal('dashboardModal')"
+        >
+            ×
+        </button>
+
+        <div class="eyebrow">
+            XYRON CONTROL
+        </div>
+
+        <h2>
+            License Dashboard
+        </h2>
+
+        <button
+            class="modal-button"
+            onclick="createLicense()"
+        >
+            + Create License
+        </button>
+
+        <div id="licenseList"></div>
+
+        <button
+            class="logout-button"
+            onclick="logoutAdmin()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</div>
 
 <footer>
 
@@ -1508,204 +1102,486 @@
         © 2026 Xyron Security
     </span>
 
-
     <span>
         FiveM Detection Scanner
     </span>
 
 </footer>
 
-
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
 <script>
+
+/* =========================================================
+   API
+========================================================= */
+
+const API_URL =
+    "https://xyron-api-1.onrender.com";
+
+
+let adminToken =
+    sessionStorage.getItem("xyron_admin_token");
 
 
 /* =========================================================
-   PARTICLES
+   MODALS
 ========================================================= */
 
-const particleCount = 55;
+function openLicenseLogin() {
 
+    document
+        .getElementById("licenseModal")
+        .classList.add("active");
 
-for (
-    let i = 0;
-    i < particleCount;
-    i++
-) {
-
-    const particle =
-        document.createElement("div");
-
-    particle.className =
-        "particle";
-
-    particle.style.left =
-        Math.random() * 100 + "vw";
-
-    particle.style.top =
-        Math.random() * 100 + "vh";
-
-
-    const size =
-        Math.random() * 3 + 1;
-
-    particle.style.width =
-        size + "px";
-
-    particle.style.height =
-        size + "px";
-
-
-    document.body.appendChild(
-        particle
-    );
-
-
-    animateParticle(
-        particle
-    );
 }
 
 
-function animateParticle(
-    particle
-) {
+function openAdminLogin() {
 
-    const duration =
-        8000 +
-        Math.random() * 15000;
+    if (adminToken) {
 
+        openDashboard();
 
-    const driftX =
-        (Math.random() - .5) *
-        180;
+        return;
 
+    }
 
-    const driftY =
-        -100 -
-        Math.random() * 300;
+    document
+        .getElementById("adminModal")
+        .classList.add("active");
+
+}
 
 
-    particle.animate(
+function closeModal(id) {
 
-        [
+    document
+        .getElementById(id)
+        .classList.remove("active");
 
-            {
-                transform:
-                    "translate3d(0,0,0)",
-
-                opacity: .05
-            },
+}
 
 
-            {
+/* =========================================================
+   LICENSE CHECK
+========================================================= */
 
-                transform:
-                    `translate3d(
-                        ${driftX}px,
-                        ${driftY}px,
-                        0
-                    )`,
+async function checkLicense() {
 
-                opacity: .6
-            },
+    const input =
+        document.getElementById("licenseInput");
 
+    const message =
+        document.getElementById("licenseMessage");
 
-            {
+    const key =
+        input.value.trim();
 
-                transform:
-                    `translate3d(
-                        ${driftX * 1.4}px,
-                        ${driftY * 1.4}px,
-                        0
-                    )`,
+    if (!key) {
 
-                opacity: 0
-            }
+        message.innerHTML =
+            "<span style='color:#ef7777'>Lisans anahtarı gir.</span>";
 
-        ],
+        return;
 
-        {
+    }
 
-            duration:
-                duration,
+    message.textContent =
+        "Kontrol ediliyor...";
 
-            easing:
-                "ease-in-out",
+    try {
 
-            iterations:
-                Infinity
+        const response =
+            await fetch(
+                API_URL + "/license/check",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        license_key: key
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (data.valid) {
+
+            message.innerHTML =
+                "<span style='color:#63dc9a'>✓ License valid.</span>";
+
+            setTimeout(() => {
+
+                closeModal("licenseModal");
+
+                alert(
+                    "Lisans doğrulandı. Xyron indirme bağlantısını bir sonraki adımda bağlayacağız."
+                );
+
+            }, 700);
+
+        } else {
+
+            message.innerHTML =
+                "<span style='color:#ef7777'>✕ Invalid or inactive license.</span>";
 
         }
 
-    );
+    } catch (error) {
 
-}
-
-
-/* =========================================================
-   MOUSE GLOW
-========================================================= */
-
-const mouseGlow =
-    document.getElementById(
-        "mouseGlow"
-    );
-
-
-document.addEventListener(
-    "mousemove",
-    function(event) {
-
-        mouseGlow.style.left =
-            event.clientX + "px";
-
-        mouseGlow.style.top =
-            event.clientY + "px";
+        message.innerHTML =
+            "<span style='color:#ef7777'>API bağlantısı kurulamadı.</span>";
 
     }
-);
-
-
-/* =========================================================
-   DOWNLOAD PLACEHOLDER
-========================================================= */
-
-function downloadNotReady(
-    event
-) {
-
-    event.preventDefault();
-
-    alert(
-        "Xyron indirme sistemi yakında aktif olacak."
-    );
 
 }
 
 
 /* =========================================================
-   DASHBOARD PLACEHOLDER
+   ADMIN LOGIN
 ========================================================= */
 
-function panelNotReady(
-    event
-) {
+async function adminLogin() {
 
-    event.preventDefault();
+    const input =
+        document.getElementById("adminKeyInput");
 
-    alert(
-        "Xyron Dashboard yakında aktif olacak."
-    );
+    const message =
+        document.getElementById("adminMessage");
+
+    const key =
+        input.value.trim();
+
+    if (!key) {
+
+        message.innerHTML =
+            "<span style='color:#ef7777'>Admin key gir.</span>";
+
+        return;
+
+    }
+
+    message.textContent =
+        "Giriş yapılıyor...";
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL + "/admin/login",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        admin_key: key
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            message.innerHTML =
+                "<span style='color:#ef7777'>✕ Hatalı admin key.</span>";
+
+            return;
+
+        }
+
+        adminToken =
+            data.token;
+
+        sessionStorage.setItem(
+            "xyron_admin_token",
+            adminToken
+        );
+
+        closeModal("adminModal");
+
+        openDashboard();
+
+    } catch (error) {
+
+        message.innerHTML =
+            "<span style='color:#ef7777'>API bağlantısı kurulamadı.</span>";
+
+    }
 
 }
 
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+async function openDashboard() {
+
+    document
+        .getElementById("dashboardModal")
+        .classList.add("active");
+
+    await loadLicenses();
+
+}
+
+
+/* =========================================================
+   LOAD LICENSES
+========================================================= */
+
+async function loadLicenses() {
+
+    const list =
+        document.getElementById("licenseList");
+
+    list.innerHTML =
+        "<p style='color:#888;margin-top:20px'>Loading...</p>";
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL + "/license/list",
+                {
+                    headers: {
+                        "Authorization":
+                            "Bearer " + adminToken
+                    }
+                }
+            );
+
+        if (response.status === 401) {
+
+            logoutAdmin();
+
+            return;
+
+        }
+
+        const data =
+            await response.json();
+
+        list.innerHTML = "";
+
+        if (!data.licenses.length) {
+
+            list.innerHTML =
+                "<p style='color:#888;margin-top:20px'>Henüz lisans oluşturulmadı.</p>";
+
+            return;
+
+        }
+
+        data.licenses.forEach(
+            license => {
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "license-item";
+
+                const status =
+                    license.active
+
+                    ? "<span class='active'>● ACTIVE</span>"
+
+                    : "<span class='revoked'>● REVOKED</span>";
+
+                item.innerHTML = `
+
+                    <div>
+
+                        <div class="license-key">
+                            ${license.license_key}
+                        </div>
+
+                        <div style="margin-top:7px">
+                            ${status}
+                        </div>
+
+                    </div>
+
+                    ${
+                        license.active
+
+                        ?
+
+                        `<button
+                            class="revoke-button"
+                            onclick="revokeLicense('${license.license_key}')"
+                        >
+                            Revoke
+                        </button>`
+
+                        :
+
+                        ""
+                    }
+
+                `;
+
+                list.appendChild(item);
+
+            }
+        );
+
+    } catch (error) {
+
+        list.innerHTML =
+            "<p style='color:#ef7777;margin-top:20px'>Lisanslar yüklenemedi.</p>";
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE LICENSE
+========================================================= */
+
+async function createLicense() {
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL + "/license/create",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Authorization":
+                            "Bearer " + adminToken
+                    }
+                }
+            );
+
+        if (response.status === 401) {
+
+            logoutAdmin();
+
+            return;
+
+        }
+
+        const data =
+            await response.json();
+
+        if (data.success) {
+
+            await loadLicenses();
+
+            alert(
+                "Yeni lisans oluşturuldu:\n\n" +
+                data.license_key
+            );
+
+        }
+
+    } catch (error) {
+
+        alert(
+            "Lisans oluşturulamadı."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   REVOKE
+========================================================= */
+
+async function revokeLicense(key) {
+
+    if (
+        !confirm(
+            "Bu lisansı iptal etmek istediğine emin misin?"
+        )
+    ) {
+
+        return;
+
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL + "/license/revoke",
+                {
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " + adminToken
+
+                    },
+
+                    body: JSON.stringify({
+                        license_key: key
+                    })
+                }
+            );
+
+        if (response.status === 401) {
+
+            logoutAdmin();
+
+            return;
+
+        }
+
+        await loadLicenses();
+
+    } catch (error) {
+
+        alert(
+            "Lisans iptal edilemedi."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logoutAdmin() {
+
+    adminToken = null;
+
+    sessionStorage.removeItem(
+        "xyron_admin_token"
+    );
+
+    closeModal(
+        "dashboardModal"
+    );
+
+}
 
 </script>
-
 
 </body>
 </html>
