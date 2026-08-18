@@ -9,7 +9,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
---bg:#030208;
 --border:rgba(255,255,255,.08);
 --text:#f7f3ff;
 --muted:#928a9f;
@@ -316,7 +315,9 @@ backdrop-filter:blur(15px)
 
 .modal-box{
 position:relative;
-width:min(520px,100%);
+width:min(700px,100%);
+max-height:85vh;
+overflow-y:auto;
 padding:35px;
 border-radius:20px;
 border:1px solid rgba(124,60,255,.25);
@@ -354,10 +355,6 @@ color:white;
 outline:none
 }
 
-.modal-box input:focus{
-border-color:rgba(124,60,255,.6)
-}
-
 .modal-button{
 width:100%;
 margin-top:15px;
@@ -370,20 +367,9 @@ cursor:pointer;
 background:linear-gradient(135deg,#7132ef,#9d62ff)
 }
 
-.modal-button:disabled{
-opacity:.6;
-cursor:not-allowed
-}
-
 .message{
 margin-top:15px;
 font-size:13px
-}
-
-.dashboard-box{
-width:min(700px,100%);
-max-height:85vh;
-overflow-y:auto
 }
 
 .license-item{
@@ -465,7 +451,11 @@ text-align:center
 <a href="#download">Download</a>
 </div>
 
-<a href="#download" class="nav-button">Get Xyron</a>
+<a
+href="https://github.com/notrace749-bot/xyron-scanner/raw/refs/heads/main/scanner.exe"
+class="nav-button">
+Get Xyron
+</a>
 </nav>
 
 <main>
@@ -489,7 +479,10 @@ anlaşılır detection raporları oluşturur.
 
 <div class="buttons">
 
-<a href="#download" class="button primary">
+<a
+href="https://github.com/notrace749-bot/xyron-scanner/raw/refs/heads/main/scanner.exe"
+class="button primary"
+download>
 Download Xyron
 </a>
 
@@ -610,17 +603,17 @@ için gerekli bilgileri hedefleyecek
 <h2>Ready to scan?</h2>
 
 <p class="section-description">
-Xyron istemcisini indirmek için
-geçerli bir lisans anahtarı gereklidir.
+Xyron istemcisini hemen indirin.
 </p>
 
 <div class="buttons">
 
-<button
+<a
+href="https://github.com/notrace749-bot/xyron-scanner/raw/refs/heads/main/scanner.exe"
 class="button primary"
-onclick="openLicenseLogin()">
+download>
 Download Xyron
-</button>
+</a>
 
 <button
 class="button secondary"
@@ -635,42 +628,7 @@ Admin Panel
 
 </main>
 
-<div id="licenseModal" class="modal">
-
-<div class="modal-box">
-
-<button
-class="modal-close"
-onclick="closeModal('licenseModal')">
-×
-</button>
-
-<div class="eyebrow">XYRON LICENSE</div>
-
-<h2>Enter License</h2>
-
-<p>
-Yetkili tarafından verilen lisans
-anahtarını gir.
-</p>
-
-<input
-id="licenseInput"
-type="text"
-autocomplete="off"
-placeholder="XYRON-XXXX-XXXX-XXXX">
-
-<button
-id="licenseButton"
-class="modal-button"
-onclick="checkLicense()">
-Continue
-</button>
-
-<div id="licenseMessage" class="message"></div>
-
-</div>
-</div>
+<!-- ADMIN LOGIN -->
 
 <div id="adminModal" class="modal">
 
@@ -704,9 +662,11 @@ Login
 </div>
 </div>
 
+<!-- ADMIN DASHBOARD -->
+
 <div id="dashboardModal" class="modal">
 
-<div class="modal-box dashboard-box">
+<div class="modal-box">
 
 <button
 class="modal-close"
@@ -747,25 +707,13 @@ Logout
 const API_URL =
 "https://xyron-api-1.onrender.com";
 
-const DOWNLOAD_URL =
-"https://github.com/notrace749-bot/xyron-scanner/raw/refs/heads/main/scanner.exe";
-
 let adminToken =
 sessionStorage.getItem("xyron_admin_token");
 
 
-function openLicenseLogin(){
-
-document
-.getElementById("licenseModal")
-.classList.add("active");
-
-document
-.getElementById("licenseInput")
-.focus();
-
-}
-
+/* =========================
+   ADMIN LOGIN
+========================= */
 
 function openAdminLogin(){
 
@@ -781,6 +729,10 @@ document
 .getElementById("adminModal")
 .classList.add("active");
 
+document
+.getElementById("adminKeyInput")
+.focus();
+
 }
 
 
@@ -793,226 +745,6 @@ document
 }
 
 
-/* =========================
-   LICENSE CHECK
-========================= */
-
-async function checkLicense(){
-
-const input =
-document.getElementById("licenseInput");
-
-const message =
-document.getElementById("licenseMessage");
-
-const button =
-document.getElementById("licenseButton");
-
-const key =
-input.value.trim();
-
-
-if(!key){
-
-message.innerHTML =
-"<span style='color:#ef7777'>Lisans anahtarı gir.</span>";
-
-return;
-
-}
-
-
-button.disabled = true;
-
-message.innerHTML =
-"<span style='color:#aaa'>Lisans kontrol ediliyor...</span>";
-
-
-try{
-
-const response =
-await fetch(
-API_URL + "/license/check",
-{
-method:"POST",
-
-headers:{
-"Content-Type":"application/json",
-"Accept":"application/json"
-},
-
-body:JSON.stringify({
-license_key:key
-})
-}
-);
-
-
-let data = null;
-
-try{
-
-data =
-await response.json();
-
-}catch{
-
-data = null;
-
-}
-
-
-console.log(
-"License response:",
-response.status,
-data
-);
-
-
-/* API endpoint bulunamadı */
-
-if(response.status === 404){
-
-message.innerHTML =
-"<span style='color:#ef7777'>✕ /license/check endpoint bulunamadı.</span>";
-
-button.disabled = false;
-
-return;
-
-}
-
-
-/* Yanlış HTTP methodu */
-
-if(response.status === 405){
-
-message.innerHTML =
-"<span style='color:#ef7777'>✕ API /license/check POST kabul etmiyor. Render'daki API güncel değil.</span>";
-
-button.disabled = false;
-
-return;
-
-}
-
-
-/* Diğer API hataları */
-
-if(!response.ok){
-
-const detail =
-data && data.detail
-? data.detail
-: "Bilinmeyen API hatası.";
-
-message.innerHTML =
-"<span style='color:#ef7777'>✕ API Hatası: "
-+
-response.status
-+
-" — "
-+
-detail
-+
-"</span>";
-
-button.disabled = false;
-
-return;
-
-}
-
-
-/* Lisans geçersiz */
-
-if(!data || data.valid !== true){
-
-message.innerHTML =
-"<span style='color:#ef7777'>✕ Geçersiz veya pasif lisans.</span>";
-
-button.disabled = false;
-
-return;
-
-}
-
-
-/* Lisans geçerli */
-
-message.innerHTML =
-"<span style='color:#63dc9a'>✓ Lisans doğrulandı. İndirme başlıyor...</span>";
-
-
-setTimeout(function(){
-
-const link =
-document.createElement("a");
-
-link.href =
-DOWNLOAD_URL;
-
-link.download =
-"XyronScanner.exe";
-
-link.target =
-"_blank";
-
-link.rel =
-"noopener";
-
-document.body.appendChild(link);
-
-link.click();
-
-link.remove();
-
-closeModal("licenseModal");
-
-button.disabled = false;
-
-},800);
-
-
-}catch(error){
-
-console.error(
-"License check error:",
-error
-);
-
-message.innerHTML =
-"<span style='color:#ef7777'>✕ API bağlantısı kurulamadı.</span>";
-
-button.disabled = false;
-
-}
-
-}
-
-
-/* ENTER */
-
-document
-.getElementById("licenseInput")
-.addEventListener(
-"keydown",
-function(event){
-
-if(event.key === "Enter"){
-
-checkLicense();
-
-}
-
-}
-);
-
-
-/* =========================
-   ADMIN LOGIN
-========================= */
-
 async function adminLogin(){
 
 const input =
@@ -1024,7 +756,6 @@ document.getElementById("adminMessage");
 const key =
 input.value.trim();
 
-
 if(!key){
 
 message.innerHTML =
@@ -1034,10 +765,8 @@ return;
 
 }
 
-
 message.textContent =
 "Giriş yapılıyor...";
-
 
 try{
 
@@ -1048,8 +777,8 @@ API_URL + "/admin/login",
 method:"POST",
 
 headers:{
-"Content-Type":
-"application/json"
+"Content-Type":"application/json",
+"Accept":"application/json"
 },
 
 body:JSON.stringify({
@@ -1058,10 +787,8 @@ admin_key:key
 }
 );
 
-
 const data =
 await response.json();
-
 
 if(!response.ok){
 
@@ -1072,32 +799,46 @@ return;
 
 }
 
-
 adminToken =
 data.token;
-
 
 sessionStorage.setItem(
 "xyron_admin_token",
 adminToken
 );
 
-
 closeModal("adminModal");
 
 openDashboard();
-
 
 }catch(error){
 
 console.error(error);
 
 message.innerHTML =
-"<span style='color:#ef7777'>API bağlantısı kurulamadı.</span>";
+"<span style='color:#ef7777'>✕ API bağlantısı kurulamadı.</span>";
 
 }
 
 }
+
+
+/* ENTER */
+
+document
+.getElementById("adminKeyInput")
+.addEventListener(
+"keydown",
+function(event){
+
+if(event.key === "Enter"){
+
+adminLogin();
+
+}
+
+}
+);
 
 
 /* =========================
@@ -1123,22 +864,25 @@ document.getElementById("licenseList");
 list.innerHTML =
 "<p style='color:#888;margin-top:20px'>Loading...</p>";
 
-
 try{
 
 const response =
 await fetch(
 API_URL + "/license/list",
 {
+method:"GET",
+
 headers:{
 "Authorization":
-"Bearer " + adminToken
+"Bearer " + adminToken,
+
+"Accept":
+"application/json"
 }
 }
 );
 
-
-if(response.status===401){
+if(response.status === 401){
 
 logoutAdmin();
 
@@ -1146,16 +890,15 @@ return;
 
 }
 
-
 const data =
 await response.json();
 
+list.innerHTML = "";
 
-list.innerHTML="";
-
-
-if(!data.licenses ||
-!data.licenses.length){
+if(
+!data.licenses ||
+!data.licenses.length
+){
 
 list.innerHTML =
 "<p style='color:#888;margin-top:20px'>Henüz lisans oluşturulmadı.</p>";
@@ -1163,7 +906,6 @@ list.innerHTML =
 return;
 
 }
-
 
 data.licenses.forEach(
 license=>{
@@ -1173,7 +915,6 @@ document.createElement("div");
 
 item.className =
 "license-item";
-
 
 const status =
 license.active
@@ -1186,8 +927,7 @@ license.active
 
 "<span class='revoked'>● REVOKED</span>";
 
-
-item.innerHTML=`
+item.innerHTML = `
 
 <div>
 
@@ -1215,12 +955,10 @@ Revoke
 
 `;
 
-
 list.appendChild(item);
 
 }
 );
-
 
 }catch(error){
 
@@ -1250,13 +988,15 @@ method:"POST",
 
 headers:{
 "Authorization":
-"Bearer " + adminToken
+"Bearer " + adminToken,
+
+"Accept":
+"application/json"
 }
 }
 );
 
-
-if(response.status===401){
+if(response.status === 401){
 
 logoutAdmin();
 
@@ -1264,17 +1004,15 @@ return;
 
 }
 
-
 const data =
 await response.json();
-
 
 if(data.success){
 
 await loadLicenses();
 
 alert(
-"Yeni lisans oluşturuldu:\n\n"+
+"Yeni lisans oluşturuldu:\n\n" +
 data.license_key
 );
 
@@ -1294,7 +1032,7 @@ alert(
 
 
 /* =========================
-   REVOKE LICENSE
+   REVOKE
 ========================= */
 
 async function revokeLicense(key){
@@ -1306,7 +1044,6 @@ if(!confirm(
 return;
 
 }
-
 
 try{
 
@@ -1321,7 +1058,10 @@ headers:{
 "application/json",
 
 "Authorization":
-"Bearer " + adminToken
+"Bearer " + adminToken,
+
+"Accept":
+"application/json"
 },
 
 body:JSON.stringify({
@@ -1330,8 +1070,7 @@ license_key:key
 }
 );
 
-
-if(response.status===401){
+if(response.status === 401){
 
 logoutAdmin();
 
@@ -1339,9 +1078,7 @@ return;
 
 }
 
-
 await loadLicenses();
-
 
 }catch(error){
 
@@ -1362,7 +1099,7 @@ alert(
 
 function logoutAdmin(){
 
-adminToken=null;
+adminToken = null;
 
 sessionStorage.removeItem(
 "xyron_admin_token"
@@ -1376,7 +1113,7 @@ closeModal(
 
 
 /* =========================
-   MODAL
+   MODAL OUTSIDE CLICK
 ========================= */
 
 document
